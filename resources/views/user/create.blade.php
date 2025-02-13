@@ -50,19 +50,16 @@
                                 @enderror
                             </div>
 
-                            <div class="grid grid-cols-4 mb-3">
-                                <div class="mt-3">
-                                    @if ($roles->isNotEmpty())
-                                        @foreach ($roles as $role)
-                                            <div class="mt-3">
-
-                                                <input type="checkbox" id="role-{{ $role->id }}" class="rounded"
-                                                    name="role[]" value="{{ old('name', $role->name) }}">
-                                                <label for="role-{{ $role->id }}">{{ $role->name }}</label>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
+                            <div class="grid grid-cols-3 gap-4 mb-3">
+                                @if ($roles->isNotEmpty())
+                                    @foreach ($roles as $role)
+                                        <div class="flex items-center space-x-2">
+                                            <input type="checkbox" id="role-{{ $role->id }}" class="rounded"
+                                                name="role[]" value="{{ old('name', $role->name) }}">
+                                            <label for="role-{{ $role->id }}">{{ $role->name }}</label>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
 
                             <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>

@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Articles extends Model
+class Articles extends Model implements HasMedia
 {
+    use InteractsWithMedia;
     use HasFactory;
 
     // Nama tabel jika berbeda dari konvensi (opsional)
@@ -24,8 +27,15 @@ class Articles extends Model
     // Kolom yang dapat diisi (fillable)
     protected $fillable = [
         'title',
-        'content',
+        'text',
         'author',
+        // 'file',
+        'summary',
+        'caption',
+        'caption_image',
+        'tgl_publish',
+        'tags',
+        'status_publish',
     ];
 
     // Kolom yang diabaikan saat serialisasi (opsional)

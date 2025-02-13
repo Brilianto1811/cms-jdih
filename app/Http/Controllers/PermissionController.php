@@ -22,7 +22,7 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $permissions = Permission::orderBy('created_at', 'asc')->paginate(25);
+        $permissions = Permission::orderBy('created_at', 'asc')->paginate(5);
         return view('permissions.list', [
             'permissions' => $permissions
         ]);
@@ -31,17 +31,38 @@ class PermissionController extends Controller implements HasMiddleware
     {
         return view('permissions.create');
     }
+    // public function store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), ['name' => 'required|unique:permissions|min:3']);
+
+    //     if ($validator->passes()) {
+    //         Permission::create(['name' => $request->name]);
+    //         return redirect()->route('permissions.index')->with('success', 'Permissions Added Success.');
+    //     } else {
+    //         return redirect()->route('permissions.create')->withInput()->withErrors($validator);
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['name' => 'required|unique:permissions|min:3']);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'permissions' => 'required|array|min:1'
+        ]);
 
         if ($validator->passes()) {
-            Permission::create(['name' => $request->name]);
-            return redirect()->route('permissions.index')->with('success', 'Permissions Added Success.');
+            foreach ($request->permissions as $perm) {
+                Permission::create([
+                    'name' => "{$perm} {$request->name}"
+                ]);
+            }
+
+            return redirect()->route('permissions.index')->with('success', 'Permissions Added Successfully.');
         } else {
             return redirect()->route('permissions.create')->withInput()->withErrors($validator);
         }
     }
+
     public function edit($id)
     {
         $permission = Permission::findOrFail($id);
@@ -58,7 +79,7 @@ class PermissionController extends Controller implements HasMiddleware
             // Permission::create(['name' => $request->name]);
             $permissions->name = $request->name;
             $permissions->save();
-            return redirect()->route('permissions.index')->with('success', 'Permissions Berhasil Diupdate.');
+            return redirect()->route('permissions.index')->with('success', 'Permissions Edited Successfully.');
         } else {
             return redirect()->route('permissions.edit', $id)->withErrors($validator)->withInput();
         }
@@ -80,7 +101,7 @@ class PermissionController extends Controller implements HasMiddleware
 
         $permission->delete();
 
-        session()->flash('success', 'Permission deleted succesfully.');
+        session()->flash('success', 'Permission Deleted Succesfully.');
         return response()->json([
             'status' => true
         ]);

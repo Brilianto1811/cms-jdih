@@ -24,6 +24,18 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <label class="text-lg font-medium">Permissions</label>
+                            <div class="grid grid-cols-2 gap-4 mb-3">
+                                @foreach (['create', 'view', 'update', 'delete'] as $perm)
+                                    <div class="flex items-center space-x-2">
+                                        <input type="checkbox" id="permission-{{ $perm }}" name="permissions[]"
+                                            value="{{ $perm }}" class="rounded">
+                                        <label for="permission-{{ $perm }}">{{ ucfirst($perm) }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+
                             <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-2">
                                 Submit
                             </button>

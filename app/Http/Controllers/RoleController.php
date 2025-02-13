@@ -24,7 +24,7 @@ class RoleController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $roles = Role::orderBy('name', 'ASC')->paginate(10);
+        $roles = Role::orderBy('name', 'ASC')->paginate(5);
         return view('roles.list', [
             'roles' => $roles
         ]);
@@ -52,20 +52,25 @@ class RoleController extends Controller implements HasMiddleware
                     $role->givePermissionTo($name);
                 }
             }
-            return redirect()->route('roles.list')->with('success', 'Roles Berhasil Ditambahkan.');
+            return redirect()->route('roles.list')->with('success', 'Role Add Successfully.');
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
-    function edit($id)
+    public function edit($id)
     {
         $role = Role::findOrFail($id);
         $hasPermissions = $role->permissions->pluck('name');
+
         $permissions = Permission::orderBy('name', 'ASC')->get();
-        // dd($hasPermissions);
+        $groupedPermissions = $permissions->groupBy(function ($item) {
+            $words = explode(' ', $item->name);
+            return implode(' ', array_slice($words, 1));
+        });
+
         return view('roles.edit', [
-            'permissions' => $permissions,
+            'groupedPermissions' => $groupedPermissions,
             'hasPermissions' => $hasPermissions,
             'role' => $role
         ]);
@@ -109,7 +114,7 @@ class RoleController extends Controller implements HasMiddleware
         }
         $role->delete();
 
-        session()->flash('success', 'Role Deleted Successfully');
+        session()->flash('success', 'Role Deleted Successfully.');
         return response()->json([
             'status' => true
         ]);

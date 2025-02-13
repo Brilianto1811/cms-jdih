@@ -6,7 +6,8 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        <img src="{{ asset('assets/Lambang_Kabupaten_Bogor.png') }}" class="block h-9 w-auto"
+                            alt="Lambang Kabupaten Bogor">
                     </a>
                 </div>
 
@@ -16,21 +17,6 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-                @can('view permissions')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.index')">
-                            {{ __('Permissions') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-
-                @can('view roles')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('roles.list')" :active="request()->routeIs('roles.list')">
-                            {{ __('Roles') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
 
                 @can('view articles')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -40,43 +26,102 @@
                     </div>
                 @endcan
 
-                @can('view users')
+                @can('view agenda')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                            {{ __('Users') }}
+                        <x-nav-link :href="route('agenda.list')" :active="request()->routeIs('agenda.list')">
+                            {{ __('Agenda') }}
                         </x-nav-link>
                     </div>
                 @endcan
-                {{-- @can('view users')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                            {{ __('Users') }}
-                        </x-nav-link>
+
+                @can('view dokumen')
+                    <!-- Dropdown Dokumen -->
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center text-sm px-4 leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    <div>{{ __('Dokumen') }}</div>
+
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                @can('view peraturan')
+                                    <x-dropdown-link :href="route('peraturan.list')">
+                                        {{ __('Peraturan') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view monografi hukum')
+                                    <x-dropdown-link :href="route('monografi-hukum.list')">
+                                        {{ __('Monografi Hukum') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view artikel')
+                                    <x-dropdown-link :href="route('artikel.list')">
+                                        {{ __('Artikel') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view yurisprudensi')
+                                    <x-dropdown-link :href="route('yurisprudensi.list')">
+                                        {{ __('Yurisprudensi') }}
+                                    </x-dropdown-link>
+                                @endcan
+                            </x-slot>
+                        </x-dropdown>
                     </div>
                 @endcan
-                @can('view users')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                            {{ __('Users') }}
-                        </x-nav-link>
+
+                @can('view settings')
+                    <!-- Dropdown Settings -->
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    <div>{{ __('Settings') }}</div>
+
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                @can('view permissions')
+                                    <x-dropdown-link :href="route('permissions.index')">
+                                        {{ __('Permissions') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view roles')
+                                    <x-dropdown-link :href="route('roles.list')">
+                                        {{ __('Roles') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view users')
+                                    <x-dropdown-link :href="route('users.list')">
+                                        {{ __('Users') }}
+                                    </x-dropdown-link>
+                                @endcan
+                            </x-slot>
+                        </x-dropdown>
                     </div>
                 @endcan
-                @can('view users')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                            {{ __('Users') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-                @can('view users')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                            {{ __('Users') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-                 --}}
             </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -84,7 +129,8 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }} ({{ Auth::user()->roles->pluck('name')->implode(', ') }})
+                            <div>{{ Auth::user()->name }}
+                                ({{ Auth::user()->roles->pluck('name')->implode(', ') }})
                             </div>
 
                             <div class="ms-1">

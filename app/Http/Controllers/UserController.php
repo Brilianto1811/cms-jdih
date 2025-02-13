@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -26,11 +27,40 @@ class UserController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::latest()->paginate(5);
         return view('user.list', [
             'users' => $users,
         ]);
     }
+
+    // public function index(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $users = User::with('roles')->latest();
+    //         return DataTables::of($users)
+    //             ->addIndexColumn()
+    //             ->addColumn('roles', function ($user) {
+    //                 return $user->roles->pluck('name')->implode(', ');
+    //             })
+    //             ->addColumn('created_at', function ($user) {
+    //                 return $user->created_at->format('d M, Y');
+    //             })
+    //             ->addColumn('action', function ($user) {
+    //                 $editBtn = auth()->user()->can('edit users') ?
+    //                     '<a href="' . route('users.edit', $user->id) . '" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>' : '';
+
+    //                 $deleteBtn = auth()->user()->can('delete users') ?
+    //                     '<a href="javascript:void(0)" onclick="deleteUser(' . $user->id . ')" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>' : '';
+
+    //                 return $editBtn . ' ' . $deleteBtn;
+    //             })
+    //             ->rawColumns(['action'])
+    //             ->make(true);
+    //     }
+
+    //     return view('user.list');
+    // }
+
 
     /**
      * Show the form for creating a new resource.
@@ -67,7 +97,7 @@ class UserController extends Controller implements HasMiddleware
 
         $user->syncRoles($request->role);
 
-        return redirect()->route('users.list')->with('success', 'user added successfully.');
+        return redirect()->route('users.list')->with('success', 'User Added Successfully.');
     }
 
     /**
@@ -89,26 +119,53 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    // public function update(Request $request, string $id)
+    // {
+    //     $user = User::findOrFail($id);
+
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required|min:3',
+    //         'email' => 'required|email|unique:users,email, ' . $id . ',id'
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->route('users.edit', $id)->withInput()->withErrors($validator);
+    //     }
+
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->save();
+
+    //     $user->syncRoles($request->role);
+
+    //     return redirect()->route('users.list')->with('success', 'user updated successfully.');
+    // }
+
+    public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email, ' . $id . ',id'
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6|confirmed', // Tidak wajib, tetapi jika diisi minimal 6 karakter
+            'roles' => 'array', // Pastikan data roles dikirim dalam array
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('users.edit', $id)->withInput()->withErrors($validator);
-        }
 
         $user->name = $request->name;
         $user->email = $request->email;
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
         $user->save();
 
-        $user->syncRoles($request->role);
+        // Update roles (hapus semua peran lama, lalu tambahkan yang baru)
+        $user->roles()->sync($request->roles ?? []); // Jika kosong, akan menghapus semua role
 
-        return redirect()->route('users.list')->with('success', 'user updated successfully.');
+        return redirect()->route('users.list')->with('success', 'User Updated Successfully.');
     }
 
     /**
@@ -127,7 +184,7 @@ class UserController extends Controller implements HasMiddleware
 
 
         $user->delete();
-        session()->flash('success', 'User deleted successfully');
+        session()->flash('success', 'User deleted Successfully');
         return response()->json([
             'status' => true
         ]);

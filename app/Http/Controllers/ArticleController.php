@@ -25,7 +25,7 @@ class ArticleController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $articles = Articles::latest()->paginate(10);
+        $articles = Articles::orderBy('title', 'ASC')->paginate(5);
         return view('articles.list', [
             'articles' => $articles,
         ]);
@@ -39,9 +39,6 @@ class ArticleController extends Controller implements HasMiddleware
         return view('articles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Validasi input
@@ -49,6 +46,16 @@ class ArticleController extends Controller implements HasMiddleware
             'title' => 'required|min:3',
             'text' => 'required',
             'author' => 'required|min:3',
+            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'summary' => 'required',
+            'caption' => 'required',
+            'caption_image' => 'required',
+            'tags' => 'required|json',
+            'tgl_publish' => 'required',
+            'status_publish' => 'required',
+        ], [
+            'tags.required' => 'Tags harus diisi.',
+            'tags.json' => 'Format tags tidak valid.',
         ]);
 
         if ($validator->passes()) {
@@ -56,70 +63,91 @@ class ArticleController extends Controller implements HasMiddleware
             $article->title = $request->title;
             $article->text = $request->text;
             $article->author = $request->author;
+            $article->summary = $request->summary;
+            $article->caption = $request->caption;
+            $article->caption_image = $request->caption_image;
+            $article->tags = json_encode($request->tags); // Simpan sebagai JSON
+            $article->tgl_publish = $request->tgl_publish;
+            $article->status_publish = $request->status_publish;
+
+            if ($request->has('tags')) {
+                $tags = json_decode($request->tags, true); // Decode JSON dari Tagify
+                $article->tags = json_encode(array_column($tags, 'value')); // Encode ke JSON sebelum disimpan
+            } else {
+                $article->tags = json_encode([]); // Pastikan tetap dalam format JSON
+            }
             $article->save();
 
-            return redirect()->route('articles.list')->with('success', 'Article added successfully.');
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $article->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            return redirect()->route('articles.list')->with('success', 'Artikel Berhasil Ditambahkan.');
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $articles = Articles::findOrFail($id);
+        $mediaItems = $articles->getMedia('images');
         return view('articles.edit', [
-            'articles' => $articles
+            'articles' => $articles,
+            'mediaItems' => $mediaItems
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update($id, Request $request)
+    public function update(Request $request, string $id)
     {
-        $articles = Articles::findOrFail($id);
-
-        // Validasi input tanpa unique
+        // Validasi input
         $validator = Validator::make($request->all(), [
             'title' => 'required|min:3',
             'text' => 'required',
             'author' => 'required|min:3',
-        ], [
-            'title.required' => 'Judul harus diisi.',
-            'title.min' => 'Judul minimal 3 karakter.',
-            'text.required' => 'Deskripsi harus diisi.',
-            'author.required' => 'Penulis harus diisi.',
-            'author.min' => 'Nama penulis minimal 3 karakter.',
+            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'summary' => 'required',
+            'caption' => 'required',
+            'caption_image' => 'required',
+            'tags' => 'required|json',
+            'tgl_publish' => 'required',
+            'status_publish' => 'required',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('articles.edit', $id)->withErrors($validator)->withInput();
+        if ($validator->passes()) {
+            $article = Articles::findOrFail($id);
+            $article->title = $request->title;
+            $article->text = $request->text;
+            $article->author = $request->author;
+            $article->summary = $request->summary;
+            $article->caption = $request->caption;
+            $article->caption_image = $request->caption_image;
+            $article->tags = json_encode($request->tags); // Simpan sebagai JSON
+            $article->tgl_publish = $request->tgl_publish;
+            $article->status_publish = $request->status_publish;
+
+            if ($request->has('tags')) {
+                $tags = json_decode($request->tags, true); // Decode JSON dari Tagify
+                $article->tags = json_encode(array_column($tags, 'value')); // Encode ke JSON sebelum disimpan
+            } else {
+                $article->tags = json_encode([]); // Pastikan tetap dalam format JSON
+            }
+            $article->save();
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $article->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            return redirect()->route('articles.list')->with('success', 'Artikel berhasil diperbarui.');
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        // Update data
-        $articles->title = $request->title;
-        $articles->text = $request->text;
-        $articles->author = $request->author;
-        $articles->save();
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('articles.list')->with('success', 'Artikel berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request)
     {
         $id = $request->id;
@@ -133,7 +161,7 @@ class ArticleController extends Controller implements HasMiddleware
         }
         $article->delete();
 
-        session()->flash('success', 'Article berhasil dihapus');
+        session()->flash('success', 'Artikel Berhasil Dihapus.');
         return response()->json([
             'status' => true
         ]);

@@ -25,29 +25,52 @@
                                 @enderror
                             </div>
 
-                            <div class="grid grid-cols-4 mb-3">
-                                <div class="mt-3">
-                                    @if ($permissions->isNotEmpty())
-                                        @foreach ($permissions as $permission)
-                                            <div class="mt-3">
-                                                <input
-                                                    {{ $hasPermissions->contains($permission->name) ? 'checked' : '' }}
-                                                    type="checkbox" id="permission-{{ $permission->id }}"
-                                                    class="rounded" name="permission[]"
-                                                    value="{{ old('name', $permission->name) }}">
-                                                <label
-                                                    for="permission-{{ $permission->id }}">{{ $permission->name }}</label>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
 
-                            <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>
+                            <div class="grid grid-cols-4 gap-4 mt-6 mb-6">
+                                @foreach ($groupedPermissions as $group => $perms)
+                                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-lg">
+                                        <div class="flex justify-between items-center">
+                                            <h3 class="font-bold text-md ">{{ $group }}</h3>
+                                            <div>
+                                                <input type="checkbox" class="ml-2 check-all-group"
+                                                    data-group="{{ Str::slug($group) }}">
+                                                <label class="ml-1 text-sm">Check All</label>
+                                            </div>
+                                        </div>
+                                        <ul class="mt-2">
+                                            @foreach ($perms as $perm)
+                                                <li>
+                                                    <input type="checkbox" name="permission[]"
+                                                        class="rounded group-{{ Str::slug($group) }}"
+                                                        value="{{ old('name', $perm->name) }}"
+                                                        id="permission-{{ $perm->id }}"
+                                                        {{ $hasPermissions->contains($perm->name) ? 'checked' : '' }}>
+                                                    {{ $perm->name }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </form>
+                        <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
+    </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.check-all-group').forEach(function(checkAll) {
+            checkAll.addEventListener('change', function() {
+                let groupClass = '.group-' + this.dataset.group;
+                document.querySelectorAll(groupClass).forEach(function(checkbox) {
+                    checkbox.checked = checkAll.checked;
+                });
+            });
+        });
+    });
+</script>
