@@ -25,7 +25,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('yurisprudensi.store') }}" method="post">
+                <form action="{{ route('yurisprudensi.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="grid grid-cols-2 gap-6">
                         <div>
@@ -204,6 +204,16 @@
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <div>
+                            <label for="file" class="text-lg font-medium">Upload Image</label>
+                            <input type="file" name="file[]" multiple
+                                class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
+                            @error('file')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                            @enderror
+                            <img id="imagePreview" class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                        </div>
                     </div>
 
                     <div class="mt-6 text-right">
@@ -213,4 +223,24 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.classList.remove('hidden');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
 </x-app-layout>

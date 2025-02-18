@@ -55,13 +55,41 @@ class YurisprudensiController extends Controller implements HasMiddleware
             'bidang_hukum' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->passes()) {
+            $yurisprudensi = new Yurisprudensi();
+            $yurisprudensi->tipe = $request->tipe;
+            $yurisprudensi->judul = $request->judul;
+            $yurisprudensi->teu_badan = $request->teu_badan;
+            $yurisprudensi->nomor_putusan = $request->nomor_putusan;
+            $yurisprudensi->jenis = $request->jenis;
+            $yurisprudensi->jenis_perkara = $request->jenis_perkara;
+            $yurisprudensi->singkatan_jenis_peradilan = $request->singkatan_jenis_peradilan;
+            $yurisprudensi->singkatan_jenis_peradilan = $request->singkatan_jenis_peradilan;
+            $yurisprudensi->jenis_peradilan = $request->jenis_peradilan;
+            $yurisprudensi->singkatan_jenis = $request->singkatan_jenis;
+            $yurisprudensi->tempat_peradilan = $request->tempat_peradilan;
+            $yurisprudensi->tempat_terbit = $request->tempat_terbit;
+            $yurisprudensi->tanggal_penetapan = $request->tanggal_penetapan;
+            $yurisprudensi->tahun_terbit = $request->tahun_terbit;
+            $yurisprudensi->sumber = $request->sumber;
+            $yurisprudensi->subjek = $request->subjek;
+            $yurisprudensi->status = $request->status;
+            $yurisprudensi->bahasa = $request->bahasa;
+            $yurisprudensi->lokasi = $request->lokasi;
+            $yurisprudensi->bidang_hukum = $request->bidang_hukum;
+
+            $yurisprudensi->save();
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $yurisprudensi->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            return redirect()->route('yurisprudensi.list')->with('success', 'Yurisprudensi Berhasil Ditambahkan.');
+        } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        Yurisprudensi::create($request->all());
-
-        return redirect()->route('yurisprudensi.list')->with('success', 'Yurisprudensi Berhasil Ditambahkan.');
     }
 
     public function edit(string $id)

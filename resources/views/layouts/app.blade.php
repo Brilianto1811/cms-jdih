@@ -13,9 +13,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-
-
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sample.css') }}" />
+    <script src="{{ asset('assets/vendor/ckeditor.js') }}"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -39,8 +38,8 @@
             {{ $slot }}
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </body>
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 @isset($script)
     {{ $script }}

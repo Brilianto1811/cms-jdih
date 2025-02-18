@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Peraturan extends Model
+class Peraturan extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+    use HasFactory;
+
     protected $table = 'peraturan';
 
     protected $primaryKey = 'id';
@@ -20,12 +26,16 @@ class Peraturan extends Model
         'singkatan_jenis',
         'tempat_penetapan',
         'tgl_penetapan',
+        'tgl_perundangan',
         'sumber',
         'subjek',
-        'status_peraturan',
+        'status',
+        'status_terbit',
         'keterangan_status',
         'bahasa',
         'lokasi',
         'bidang_hukum',
+        // 'file',
+        // 'file_abstraksi',
     ];
 }

@@ -33,6 +33,7 @@ class MonografiHukumController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        // Validasi input
         $validator = Validator::make($request->all(), [
             'deskripsi_fisik' => 'nullable|string',
             'no_induk_buku' => 'nullable|string',
@@ -50,16 +51,44 @@ class MonografiHukumController extends Controller implements HasMiddleware
             'nomor_panggil' => 'nullable|string',
             'teu_badan' => 'nullable|string',
             'judul' => 'required|string',
+            'keterangan_status' => 'nullable|string',
+            'file' => 'nullable|array',
+            'file.*' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->passes()) {
+            $monografi = new MonografiHukum();
+            $monografi->deskripsi_fisik = $request->deskripsi_fisik;
+            $monografi->no_induk_buku = $request->no_induk_buku;
+            $monografi->bidang_hukum = $request->bidang_hukum;
+            $monografi->lokasi = $request->lokasi;
+            $monografi->bahasa = $request->bahasa;
+            $monografi->isbn_issn = $request->isbn_issn;
+            $monografi->subjek = $request->subjek;
+            $monografi->sumber = $request->sumber;
+            $monografi->tipe = $request->tipe;
+            $monografi->tahun_terbit = $request->tahun_terbit;
+            $monografi->penerbit = $request->penerbit;
+            $monografi->tempat_terbit = $request->tempat_terbit;
+            $monografi->cetakan_edisi = $request->cetakan_edisi;
+            $monografi->nomor_panggil = $request->nomor_panggil;
+            $monografi->teu_badan = $request->teu_badan;
+            $monografi->judul = $request->judul;
+
+            $monografi->save();
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $monografi->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            return redirect()->route('monografi-hukum.list')->with('success', 'Monografi Hukum Berhasil Ditambahkan.');
+        } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        MonografiHukum::create($request->all());
-
-        return redirect()->route('monografi-hukum.list')->with('success', 'Monografi Hukum Berhasil Ditambahkan.');
     }
+
 
     public function edit(string $id)
     {

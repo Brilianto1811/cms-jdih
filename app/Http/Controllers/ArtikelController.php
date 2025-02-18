@@ -48,13 +48,33 @@ class ArtikelController extends Controller implements HasMiddleware
             'bidang_hukum' => 'nullable|string',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->passes()) {
+            $artikel = new Artikel();
+            $artikel->tipe = $request->tipe;
+            $artikel->judul = $request->judul;
+            $artikel->teu_badan = $request->teu_badan;
+            $artikel->cetakan_edisi = $request->cetakan_edisi;
+            $artikel->tempat_terbit = $request->tempat_terbit;
+            $artikel->penerbit = $request->penerbit;
+            $artikel->tahun_terbit = $request->tahun_terbit;
+            $artikel->sumber = $request->sumber;
+            $artikel->subjek = $request->subjek;
+            $artikel->bahasa = $request->bahasa;
+            $artikel->lokasi = $request->lokasi;
+            $artikel->bidang_hukum = $request->bidang_hukum;
+
+            $artikel->save();
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $artikel->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            return redirect()->route('monografi-hukum.list')->with('success', 'Monografi Hukum Berhasil Ditambahkan.');
+        } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        Artikel::create($request->all());
-
-        return redirect()->route('artikel.list')->with('success', 'Artikel Berhasil Ditambahkan.');
     }
 
     public function edit(string $id)

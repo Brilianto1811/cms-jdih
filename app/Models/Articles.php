@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Articles extends Model implements HasMedia
@@ -36,11 +37,18 @@ class Articles extends Model implements HasMedia
         'tgl_publish',
         'tags',
         'status_publish',
+        'kategori_konten',
+        // 'status_konten',
+        'spesial_kategori',
+        'super_artikel',
+        'slug',
     ];
 
-    // Kolom yang diabaikan saat serialisasi (opsional)
-    // protected $hidden = [];
-
-    // Kolom yang dikonversi ke tipe data tertentu (opsional)
-    // protected $casts = [];
+    protected static function boot()
+    {
+        parent::boot();
+        static::saving(function ($article) {
+            $article->slug = Str::slug($article->title);
+        });
+    }
 }

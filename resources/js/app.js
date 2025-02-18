@@ -1,6 +1,12 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+import 'datatables.net-bs5';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import $ from 'jquery';
+window.$ = window.jQuery = $;
 
 window.Alpine = Alpine;
 

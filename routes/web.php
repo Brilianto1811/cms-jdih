@@ -4,12 +4,18 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\InfografisController;
 use App\Http\Controllers\MonografiHukumController;
 use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SejarahController;
+use App\Http\Controllers\SekapurSirihController;
+use App\Http\Controllers\SliderController;
+use App\Http\Controllers\StrukturOrganisasiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisiMisiController;
 use App\Http\Controllers\YurisprudensiController;
 use App\Models\MonografiHukum;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +29,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    // SETTINGS
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -41,7 +49,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles', [RoleController::class, 'destroy'])->name('roles.destroy');
 
+    Route::get('/users', [UserController::class, 'index'])->name('users.list');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+    // BERANDA
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.list');
+    Route::get('/articles/{slug}', [ArticleController::class, 'showKhusus'])->name('articles.show-khusus');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
@@ -52,17 +70,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/agenda/create', [AgendaController::class, 'create'])->name('agenda.create');
     Route::post('/agenda', [AgendaController::class, 'store'])->name('agenda.store');
     Route::get('/agenda/{agenda}/edit', [AgendaController::class, 'edit'])->name('agenda.edit');
-    // Route::post('/agenda/{id}', [AgendaController::class, 'update'])->name('agenda.update');
     Route::post('/agenda/{agenda}', [AgendaController::class, 'update'])->name('agenda.update');
     Route::delete('/agenda', [AgendaController::class, 'destroy'])->name('agenda.destroy');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users.list');
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::post('/users/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy');
 
+
+    // DOKUMEN
     Route::get('/peraturan', [PeraturanController::class, 'index'])->name('peraturan.list');
     Route::get('/peraturan/create', [PeraturanController::class, 'create'])->name('peraturan.create');
     Route::post('/peraturan', [PeraturanController::class, 'store'])->name('peraturan.store');
@@ -90,6 +103,40 @@ Route::middleware('auth')->group(function () {
     Route::get('/yurisprudensi/{id}/edit', [YurisprudensiController::class, 'edit'])->name('yurisprudensi.edit');
     Route::post('/yurisprudensi/{id}', [YurisprudensiController::class, 'update'])->name('yurisprudensi.update');
     Route::delete('/yurisprudensi', [YurisprudensiController::class, 'destroy'])->name('yurisprudensi.destroy');
+
+
+
+
+    // TENTANG
+    Route::get('/sejarah/create', [SejarahController::class, 'create'])->name('sejarah.create');
+    Route::post('/sejarah', [SejarahController::class, 'store'])->name('sejarah.store');
+
+    Route::get('/sambutan/create', [SekapurSirihController::class, 'create'])->name('sambutan.create');
+    Route::post('/sambutan', [SekapurSirihController::class, 'store'])->name('sambutan.store');
+
+    Route::get('/visi-misi/create', [VisiMisiController::class, 'create'])->name('visi-misi.create');
+    Route::post('/visi-misi', [VisiMisiController::class, 'store'])->name('visi-misi.store');
+
+    Route::get('/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])->name('struktur-organisasi.list');
+    Route::get('/struktur-organisasi/create', [StrukturOrganisasiController::class, 'create'])->name('struktur-organisasi.create');
+    Route::post('/struktur-organisasi', [StrukturOrganisasiController::class, 'store'])->name('struktur-organisasi.store');
+    Route::get('/struktur-organisasi/{id}/edit', [StrukturOrganisasiController::class, 'edit'])->name('struktur-organisasi.edit');
+    Route::post('/struktur-organisasi/{id}', [StrukturOrganisasiController::class, 'update'])->name('struktur-organisasi.update');
+    Route::delete('/struktur-organisasi', [StrukturOrganisasiController::class, 'destroy'])->name('struktur-organisasi.destroy');
+
+    Route::get('/slider', [SliderController::class, 'index'])->name('slider.list');
+    Route::get('/slider/create', [SliderController::class, 'create'])->name('slider.create');
+    Route::post('/slider', [SliderController::class, 'store'])->name('slider.store');
+    Route::get('/slider/{id}/edit', [SliderController::class, 'edit'])->name('slider.edit');
+    Route::post('/slider/{id}', [SliderController::class, 'update'])->name('slider.update');
+    Route::delete('/slider', [SliderController::class, 'destroy'])->name('slider.destroy');
+
+    Route::get('/infografis', [InfografisController::class, 'index'])->name('infografis.list');
+    Route::get('/infografis/create', [InfografisController::class, 'create'])->name('infografis.create');
+    Route::post('/infografis', [InfografisController::class, 'store'])->name('infografis.store');
+    Route::get('/infografis/{id}/edit', [InfografisController::class, 'edit'])->name('infografis.edit');
+    Route::post('/infografis/{id}', [InfografisController::class, 'update'])->name('infografis.update');
+    Route::delete('/infografis', [InfografisController::class, 'destroy'])->name('infografis.destroy');
 });
 
 require __DIR__ . '/auth.php';

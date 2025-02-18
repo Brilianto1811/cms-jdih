@@ -33,33 +33,74 @@ class PeraturanController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        // Validasi input
         $validator = Validator::make($request->all(), [
-            'tipe_dokumen' => 'required|min:3',
+            'tipe_dokumen' => 'required',
             'judul' => 'required',
-            'teu_badan' => 'required|min:3',
+            'teu_badan' => 'required',
             'no_peraturan' => 'required|integer',
             'tahun' => 'required|integer',
             'jenis' => 'required',
             'singkatan_jenis' => 'required',
             'tempat_penetapan' => 'required',
             'tgl_penetapan' => 'required|date',
+            'tgl_perundangan' => 'required|date',
             'sumber' => 'required',
             'subjek' => 'required',
-            'status_peraturan' => 'required',
-            'keterangan_status' => 'nullable',
+            'status' => 'required',
+            'status_terbit' => 'required',
+            'keterangan_status' => 'required',
             'bahasa' => 'required',
             'lokasi' => 'required',
             'bidang_hukum' => 'required',
+            'file' => 'required|array',
+            'file.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'file_abstraksi' => 'required|array',
+            'file_abstraksi.*' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
+        // dd($request);
 
-        if ($validator->fails()) {
+        if ($validator->passes()) {
+            $peraturan = new Peraturan();
+            $peraturan->tipe_dokumen = $request->tipe_dokumen;
+            $peraturan->judul = $request->judul;
+            $peraturan->teu_badan = $request->teu_badan;
+            $peraturan->no_peraturan = $request->no_peraturan;
+            $peraturan->tahun = $request->tahun;
+            $peraturan->jenis = $request->jenis;
+            $peraturan->singkatan_jenis = $request->singkatan_jenis;
+            $peraturan->tempat_penetapan = $request->tempat_penetapan;
+            $peraturan->tgl_penetapan = $request->tgl_penetapan;
+            $peraturan->tgl_perundangan = $request->tgl_perundangan;
+            $peraturan->sumber = $request->sumber;
+            $peraturan->subjek = $request->subjek;
+            $peraturan->status = $request->status;
+            $peraturan->status_terbit = $request->status_terbit;
+            $peraturan->keterangan_status = $request->keterangan_status;
+            $peraturan->bahasa = $request->bahasa;
+            $peraturan->lokasi = $request->lokasi;
+            $peraturan->bidang_hukum = $request->bidang_hukum;
+
+            $peraturan->save();
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $peraturan->addMedia($file)->toMediaCollection('images');
+                }
+            }
+
+            if ($request->hasFile('file_abstraksi')) {
+                foreach ($request->file('file_abstraksi') as $file) {
+                    $peraturan->addMedia($file)->toMediaCollection('abstraksi');
+                }
+            }
+
+            return redirect()->route('peraturan.list')->with('success', 'Peraturan Berhasil Ditambahkan.');
+        } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        Peraturan::create($request->all());
-
-        return redirect()->route('peraturan.list')->with('success', 'Peraturan Berhasil Ditambahkan.');
     }
+
 
     public function edit(string $id)
     {
@@ -79,9 +120,9 @@ class PeraturanController extends Controller implements HasMiddleware
             'singkatan_jenis' => 'required',
             'tempat_penetapan' => 'required',
             'tgl_penetapan' => 'required|date',
+            'tgl_perundangan' => 'required|date',
             'sumber' => 'required',
             'subjek' => 'required',
-            'status_peraturan' => 'required',
             'keterangan_status' => 'nullable',
             'bahasa' => 'required',
             'lokasi' => 'required',
