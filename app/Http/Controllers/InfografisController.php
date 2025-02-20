@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class InfografisController extends Controller implements HasMiddleware
 {
@@ -23,11 +24,30 @@ class InfografisController extends Controller implements HasMiddleware
     /**
      * Menampilkan daftar struktur organisasi
      */
-    public function index()
-    {
-        $infografis = Infografis::orderBy('id', 'ASC')->paginate(5);
 
-        return view('infografis.list', compact('infografis'));
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Infografis::latest()->select('id', 'judul', 'file');
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('file', function ($item) {
+                    $imageUrl = $item->getFirstMediaUrl('struktur_files', 'public');
+
+                    if ($imageUrl) {
+                        return '<img src="' . $imageUrl . '" alt="Gambar" class="w-16 h-16 rounded-md">';
+                    }
+                    return 'Tidak ada gambar';
+                })
+                ->rawColumns(['file', 'action']) // Tambahkan 'file' di sini
+                ->addColumn('action', function ($item) {
+                    return view('infografis.action', compact('item'))->render();
+                })
+                ->make(true);
+        }
+
+        return view('infografis.list');
     }
 
     /**
@@ -54,16 +74,15 @@ class InfografisController extends Controller implements HasMiddleware
             $infografis->judul = $request->judul;
 
             $infografis->save();
-            // dd($infografis->getMedia('struktur_files'));
 
             // if ($request->hasFile('file')) {
-            //     foreach ($request->file('file') as $file) {
-            //         $infografis->addMedia($file)->toMediaCollection('struktur_files', 'public');
-            //     }
+            //     $infografis->addMedia($request->file('file')[0])->toMediaCollection('struktur_files', 'public');
             // }
 
             if ($request->hasFile('file')) {
-                $infografis->addMedia($request->file('file')[0])->toMediaCollection('struktur_files', 'public');
+                foreach ($request->file('file') as $file) {
+                    $infografis->addMedia($file)->toMediaCollection('struktur_files', 'public');
+                }
             }
 
             return redirect()->route('infografis.list')->with('success', 'Infografis Berhasil Ditambahkan.');
@@ -80,7 +99,7 @@ class InfografisController extends Controller implements HasMiddleware
         $infografis = Infografis::findOrFail($id);
         $file = $infografis->getFirstMediaUrl('struktur_files');
 
-        return view('infografis.edit', compact('struktur', 'file'));
+        return view('infografis.edit', compact('infografis', 'file'));
     }
 
     /**

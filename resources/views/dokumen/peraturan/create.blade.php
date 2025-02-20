@@ -39,7 +39,7 @@
 
                 <form action="{{ route('peraturan.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="grid grid-cols-1 gap-6">
+                    <div class="grid grid-cols-2 gap-6">
                         <div class="bg-white border p-6 rounded-lg shadow-lg">
                             <h3 class="text-lg font-semibold mb-4 text-center">Informasi Umum</h3>
                             <div class="grid grid-cols-2 gap-6">

@@ -18,7 +18,58 @@
                     </x-nav-link>
                 </div>
 
-                @can('view articles')
+                @can('view Beranda')
+                    <!-- Dropdown Beranda -->
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    <div>{{ __('Berita & Profil') }}</div>
+
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                @can('view articles')
+                                    <x-dropdown-link :href="route('articles.list')">
+                                        {{ __('Berita') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view agenda')
+                                    <x-dropdown-link :href="route('agenda.list')">
+                                        {{ __('Agenda') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view slider')
+                                    <x-dropdown-link :href="route('slider.list')">
+                                        {{ __('Slider') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view infografis')
+                                    <x-dropdown-link :href="route('infografis.list')">
+                                        {{ __('Infografis') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view struktur organisasi')
+                                    <x-dropdown-link :href="route('struktur-organisasi.list')">
+                                        {{ __('Struktur Organisasi') }}
+                                    </x-dropdown-link>
+                                @endcan
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                @endcan
+
+                {{-- @can('view articles')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('articles.list')" :active="request()->routeIs('articles.list')">
                             {{ __('Berita') }}
@@ -48,7 +99,7 @@
                             {{ __('Infografis') }}
                         </x-nav-link>
                     </div>
-                @endcan
+                @endcan --}}
 
                 @can('view dokumen')
                     <!-- Dropdown Dokumen -->
@@ -96,14 +147,14 @@
                     </div>
                 @endcan
 
-                {{-- @can('view tentang')
-                    <!-- Dropdown Dokumen -->
+                @can('view Galeri')
+                    <!-- Dropdown Galeri -->
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <x-dropdown align="left" width="48">
                             <x-slot name="trigger">
                                 <button
                                     class="inline-flex items-center text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                                    <div>{{ __('Tentang') }}</div>
+                                    <div>{{ __('Galeri') }}</div>
 
                                     <div class="ms-1">
                                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -117,30 +168,20 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                @can('view sejarah')
-                                    <x-dropdown-link :href="route('sejarah.create')">
-                                        {{ __('Sejarah') }}
+                                @can('view foto')
+                                    <x-dropdown-link :href="route('foto.list')">
+                                        {{ __('Foto') }}
                                     </x-dropdown-link>
                                 @endcan
-                                @can('view sambutan')
-                                    <x-dropdown-link :href="route('sambutan.create')">
-                                        {{ __('Sambutan') }}
-                                    </x-dropdown-link>
-                                @endcan
-                                @can('view struktur organisasi')
-                                    <x-dropdown-link :href="route('struktur-organisasi.list')">
-                                        {{ __('Struktur Organisasi') }}
-                                    </x-dropdown-link>
-                                @endcan
-                                @can('view visi misi')
-                                    <x-dropdown-link :href="route('visi-misi.create')">
-                                        {{ __('Visi Misi') }}
+                                @can('view video')
+                                    <x-dropdown-link :href="route('video.list')">
+                                        {{ __('Video') }}
                                     </x-dropdown-link>
                                 @endcan
                             </x-slot>
                         </x-dropdown>
                     </div>
-                @endcan --}}
+                @endcan
 
                 @can('view settings')
                     <!-- Dropdown Settings -->

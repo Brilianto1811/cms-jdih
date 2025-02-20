@@ -24,7 +24,7 @@ class SliderController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $slider = Slider::latest()->select('id', 'judul', 'sub_judul', 'judul_tombol', 'tombol_url');
+            $slider = Slider::latest()->select('id', 'judul', 'sub_judul', 'penempatan', 'tombol_url');
 
             return DataTables::of($slider)
                 ->addIndexColumn()
@@ -52,8 +52,9 @@ class SliderController extends Controller implements HasMiddleware
         $validator = Validator::make($request->all(), [
             'judul' => 'nullable',
             'sub_judul' => 'nullable',
-            'judul_tombol' => 'nullable',
+            // 'judul_tombol' => 'nullable',
             'tombol_url' => 'nullable',
+            'penempatan' => 'nullable',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
         // dd($request);
@@ -62,8 +63,9 @@ class SliderController extends Controller implements HasMiddleware
             $slider = new Slider();
             $slider->judul = $request->judul;
             $slider->sub_judul = $request->sub_judul;
-            $slider->judul_tombol = $request->judul_tombol;
+            // $slider->judul_tombol = $request->judul_tombol;
             $slider->tombol_url = $request->tombol_url;
+            $slider->penempatan = $request->penempatan;
 
             $slider->save();
 
@@ -95,8 +97,9 @@ class SliderController extends Controller implements HasMiddleware
         $validator = Validator::make($request->all(), [
             'judul' => 'nullable',
             'sub_judul' => 'nullable',
-            'judul_tombol' => 'nullable',
+            // 'judul_tombol' => 'nullable',
             'tombol_url' => 'nullable',
+            'penempatan' => 'nullable',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
@@ -104,8 +107,9 @@ class SliderController extends Controller implements HasMiddleware
             $slider = Slider::findOrFail($id);
             $slider->judul = $request->judul;
             $slider->sub_judul = $request->sub_judul;
-            $slider->judul_tombol = $request->judul_tombol;
+            // $slider->judul_tombol = $request->judul_tombol;
             $slider->tombol_url = $request->tombol_url;
+            $slider->penempatan = $request->penempatan;
 
             $slider->save();
 
@@ -127,7 +131,7 @@ class SliderController extends Controller implements HasMiddleware
         $slider = Slider::find($id);
 
         if ($slider == null) {
-            session()->flash('error', 'Article not found');
+            session()->flash('error', 'Slider not found');
             return response()->json([
                 'status' => false
             ]);

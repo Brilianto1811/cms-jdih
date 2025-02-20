@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Str;
-
+use Yajra\DataTables\DataTables;
 
 class ArticleController extends Controller implements HasMiddleware
 {
@@ -24,12 +24,44 @@ class ArticleController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $articles = Articles::orderBy('id', 'DESC')->paginate(5);
+    //     return view('articles.list', [
+    //         'articles' => $articles,
+    //     ]);
+    // }
+
+    public function index(Request $request)
     {
-        $articles = Articles::orderBy('id', 'DESC')->paginate(5);
-        return view('articles.list', [
-            'articles' => $articles,
-        ]);
+        if ($request->ajax()) {
+            $data = Articles::latest()->select('id', 'status_publish', 'title', 'text', 'tgl_publish');
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return view('articles.action', compact('item'))->render();
+                })
+                ->addColumn('status_publish', function ($item) {
+                    $statusClasses = [
+                        'Publish' => 'bg-green-500 text-white',
+                        'Draft' => 'bg-gray-500 text-white',
+                        'Pending' => 'bg-orange-500 text-white',
+                        'Reject' => 'bg-red-500 text-white',
+                        'Perlu Validasi' => 'bg-orange-500 text-white',
+                        'spesial' => 'bg-blue-500 text-white',
+                    ];
+                    $statusClass = $statusClasses[$item->status_publish] ?? 'bg-gray-500 text-white';
+                    return '<span class="px-3 py-1 rounded-md text-sm font-medium ' . $statusClass . '">' . $item->status_publish . '</span>';
+                })
+                ->addColumn('text', function ($item) {
+                    return Str::limit(strip_tags($item->text), 150, '...');
+                })
+                ->rawColumns(['action', 'status_publish'])
+                ->make(true);
+        }
+
+        return view('articles.list');
     }
 
     public function showKhusus($slug)
@@ -45,62 +77,6 @@ class ArticleController extends Controller implements HasMiddleware
     {
         return view('articles.create');
     }
-
-    // public function store(Request $request)
-    // {
-    //     // Validasi input
-    // $validator = Validator::make($request->all(), [
-    //     'title' => 'required|min:3',
-    //     'text' => 'required',
-    //     'author' => 'required|min:3',
-    //     'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-    //     'summary' => 'required',
-    //     'caption' => 'required',
-    //     'caption_image' => 'required',
-    //     'tags' => 'required|json',
-    //     'tgl_publish' => 'required',
-    //     'status_publish' => 'required',
-    //     'kategori_konten' => 'required',
-    //     'status_konten' => 'required',
-    // ], [
-    //     'tags.required' => 'Tags harus diisi.',
-    //     'tags.json' => 'Format tags tidak valid.',
-    // ]);
-
-    // if ($validator->passes()) {
-    //     $article = new Articles();
-    //     $article->title = $request->title;
-    //     $article->text = $request->text;
-    //     $article->author = $request->author;
-    //     $article->summary = $request->summary;
-    //     $article->caption = $request->caption;
-    //     $article->caption_image = $request->caption_image;
-    //     $article->tags = json_encode($request->tags); // Simpan sebagai JSON
-    //     $article->tgl_publish = $request->tgl_publish;
-    //     $article->status_publish = $request->status_publish;
-    //     $article->kategori_konten = $request->kategori_konten;
-    //     $article->status_konten = $request->status_konten;
-
-    //         if ($request->has('tags')) {
-    //             $tags = json_decode($request->tags, true); // Decode JSON dari Tagify
-    //             $article->tags = json_encode(array_column($tags, 'value')); // Encode ke JSON sebelum disimpan
-    //         } else {
-    //             $article->tags = json_encode([]); // Pastikan tetap dalam format JSON
-    //         }
-    //         $article->save();
-
-    //         if ($request->hasFile('file')) {
-    //             foreach ($request->file('file') as $file) {
-    //                 $article->addMedia($file)
-    //                     ->toMediaCollection('images', 'public'); // Simpan langsung ke 'public' disk
-    //             }
-    //         }
-
-    //         return redirect()->route('articles.list')->with('success', 'Artikel Berhasil Ditambahkan.');
-    //     } else {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-    // }
 
     public function store(Request $request)
     {
@@ -194,7 +170,7 @@ class ArticleController extends Controller implements HasMiddleware
             'title' => 'required|min:3',
             'text' => 'required',
             'author' => 'required|min:3',
-            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'summary' => 'required',
             'caption' => 'required',
             'caption_image' => 'required',
@@ -202,7 +178,8 @@ class ArticleController extends Controller implements HasMiddleware
             'tgl_publish' => 'required',
             'status_publish' => 'required',
             'kategori_konten' => 'required',
-            'status_konten' => 'required',
+            'spesial_kategori' => 'required',
+            'super_artikel' => 'nullable',
         ]);
 
         if ($validator->passes()) {
@@ -218,7 +195,8 @@ class ArticleController extends Controller implements HasMiddleware
             $article->tgl_publish = $request->tgl_publish;
             $article->status_publish = $request->status_publish;
             $article->kategori_konten = $request->kategori_konten;
-            $article->status_konten = $request->status_konten;
+            $article->spesial_kategori = $request->spesial_kategori;
+            $article->super_artikel = $request->super_artikel;
 
             if ($request->has('tags')) {
                 $tags = json_decode($request->tags, true); // Decode JSON dari Tagify

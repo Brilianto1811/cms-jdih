@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class AgendaController extends Controller implements HasMiddleware
 {
@@ -23,13 +24,35 @@ class AgendaController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $agenda = Agenda::orderBy('tgl_agenda', 'ASC')->paginate(5);
+    //     return view('agenda.list', [
+    //         'agenda' => $agenda,
+    //     ]);
+    // }
+
+    public function index(Request $request)
     {
-        $agenda = Agenda::orderBy('tgl_agenda', 'ASC')->paginate(5);
-        return view('agenda.list', [
-            'agenda' => $agenda,
-        ]);
+        if ($request->ajax()) {
+            $agenda = Agenda::orderBy('tgl_agenda', 'ASC')->get();
+
+            return DataTables::of($agenda)
+                ->addIndexColumn()
+                ->addColumn('tgl_agenda', function ($row) {
+                    return \Carbon\Carbon::parse($row->tanggal_kegiatan)
+                        ->locale('id')->isoFormat('dddd, D MMMM YYYY');
+                })
+                ->addColumn('action', function ($item) {
+                    return view('agenda.action', compact('item'))->render();
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('agenda.list');
     }
+
 
     /**
      * Show the form for creating a new resource.

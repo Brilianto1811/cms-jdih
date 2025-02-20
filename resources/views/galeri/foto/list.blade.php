@@ -2,11 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Infografis') }}
+                {{ __('Foto') }}
             </h2>
-            @can('create infografis')
-                <a href="{{ route('infografis.create') }}"
-                    class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">Create</a>
+            @can('create foto')
+                <a href="{{ route('foto.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">Create</a>
             @endcan
         </div>
     </x-slot>
@@ -18,8 +17,8 @@
                 <table id="sliderTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
                     <thead class="bg-gray-50">
                         <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
-                            <th class="px-4 py-2 border-b">Judul</th>
-                            <th class="px-4 py-2 border-b">Gambar</th>
+                            <th class="px-4 py-2 border-b">Nama Galeri</th>
+                            <th class="px-4 py-2 border-b">Tanggal</th>
                             <th class="px-4 py-2 border-b">Action</th>
                         </tr>
                     </thead>
@@ -32,10 +31,10 @@
     </div>
     <x-slot name="script">
         <script type="text/javascript">
-            window.deleteInfografis = function(id) {
+            window.deleteFoto = function(id) {
                 if (confirm("Are you sure you want to delete?")) {
                     $.ajax({
-                        url: '{{ route('infografis.destroy') }}',
+                        url: '{{ route('foto.destroy') }}',
                         type: 'DELETE',
                         data: {
                             id: id,
@@ -55,16 +54,14 @@
                 $('#sliderTable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('infografis.list') }}",
+                    ajax: "{{ route('foto.list') }}",
                     columns: [{
-                            data: 'judul',
-                            name: 'judul'
+                            data: 'nama',
+                            name: 'nama'
                         },
                         {
-                            data: 'file',
-                            name: 'file',
-                            orderable: false,
-                            searchable: false
+                            data: 'tgl_galeri',
+                            name: 'tgl_galeri'
                         },
                         {
                             data: 'action',
@@ -97,14 +94,15 @@
                         $('table').addClass('w-full border-collapse border border-gray-300');
                         $('th, td').addClass('px-4 py-2 border');
 
-                        // Styling untuk input pencarian
                         $('input[type="search"]').addClass('border-gray-300 rounded-md p-2 ml-2');
 
-                        // Styling untuk pagination
-                        $('.dataTables_paginate').addClass('flex gap-2 justify-center md:justify-end mt-4');
+                        $('.dataTables_paginate').addClass(
+                            'flex flex-wrap gap-2 justify-center md:justify-end mt-4');
                         $('.dataTables_paginate .paginate_button').addClass(
                             'px-3 py-1 border border-gray-300 rounded-md bg-white hover:bg-gray-200 transition'
                         );
+
+                        $('.dataTables_paginate .paginate_button').css('display', 'inline-block');
                     }
                 });
             });

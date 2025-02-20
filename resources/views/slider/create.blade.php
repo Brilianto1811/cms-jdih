@@ -28,49 +28,96 @@
                 <form action="{{ route('slider.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <label for="judul" class="text-lg font-medium">Judul</label>
-                            <input value="{{ old('judul') }}" name="judul" placeholder="Judul" type="text"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('judul')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Judul</h3>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label for="judul" class="text-lg font-medium">Judul</label>
+                                    <input value="{{ old('judul') }}" name="judul" placeholder="Judul" type="text"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('judul')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="sub_judul" class="text-lg font-medium">Sub Judul</label>
+                                    <input value="{{ old('sub_judul') }}" name="sub_judul" placeholder="Sub Judul"
+                                        type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('sub_judul')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label for="sub_judul" class="text-lg font-medium">Sub Judul</label>
-                            <input value="{{ old('sub_judul') }}" name="sub_judul" placeholder="Sub Judul"
-                                type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('sub_judul')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">URL Slider</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="tombol_url" class="text-lg font-medium">Tombol Url</label>
+                                    <input value="{{ old('tombol_url') }}" name="tombol_url" placeholder="Tombol Url"
+                                        type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('tombol_url')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label for="judul_tombol" class="text-lg font-medium">Judul Tombol</label>
-                            <input value="{{ old('judul_tombol') }}" name="judul_tombol" placeholder="Judul Tombol"
-                                type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('judul_tombol')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label for="tombol_url" class="text-lg font-medium">Tombol Url</label>
-                            <input value="{{ old('tombol_url') }}" name="tombol_url" placeholder="Tombol Url"
-                                type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('tombol_url')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Penempatan Slider</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="penempatan" class="text-lg font-medium">Penempatan</label>
+                                    <select name="penempatan" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                        <option>Pilih Penempatan</option>
+                                        <option value="Header" {{ old('penempatan') == 'Header' ? 'selected' : '' }}>
+                                            Header</option>
+                                        <option value="Main Utama"
+                                            {{ old('penempatan') == 'Main Utama' ? 'selected' : '' }}>
+                                            Main Utama</option>
+                                        <option value="Main Tengah"
+                                            {{ old('penempatan') == 'Main Tengah' ? 'selected' : '' }}>Main Tengah
+                                        </option>
+                                        <option value="Main Bawah"
+                                            {{ old('penempatan') == 'Main Bawah' ? 'selected' : '' }}>Main Bawah
+                                        </option>
+                                        <option value="Sidebar Atas"
+                                            {{ old('penempatan') == 'Sidebar Atas' ? 'selected' : '' }}>Sidebar Atas
+                                        </option>
+                                        <option value="Sidebar Bawah"
+                                            {{ old('penempatan') == 'Sidebar Bawah' ? 'selected' : '' }}>Sidebar Bawah
+                                        </option>
+                                        <option value="Sebelum Footer"
+                                            {{ old('penempatan') == 'Sebelum Footer' ? 'selected' : '' }}>
+                                            Sebelum Footer
+                                        </option>
+                                        <option value="Footer" {{ old('penempatan') == 'Footer' ? 'selected' : '' }}>
+                                            Footer
+                                        </option>
+                                    </select>
+                                    @error('penempatan')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label for="file" class="text-lg font-medium">Upload Image</label>
-                            <input type="file" name="file[]" class="border-gray-300 shadow-sm w-full rounded-lg p-2"
-                                id="imageInput">
-                            @error('file')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                            <img id="imagePreview" class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Gambar</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="file" class="text-lg font-medium">Mengunggah Gambar</label>
+                                    <input type="file" name="file[]"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
+                                    @error('file')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                    <img id="imagePreview"
+                                        class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-6 text-right">

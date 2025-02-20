@@ -3,7 +3,7 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArtikelController;
-use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\InfografisController;
 use App\Http\Controllers\MonografiHukumController;
 use App\Http\Controllers\PeraturanController;
@@ -17,7 +17,6 @@ use App\Http\Controllers\StrukturOrganisasiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisiMisiController;
 use App\Http\Controllers\YurisprudensiController;
-use App\Models\MonografiHukum;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -60,7 +59,7 @@ Route::middleware('auth')->group(function () {
     // BERANDA
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.list');
     Route::get('/articles/{slug}', [ArticleController::class, 'showKhusus'])->name('articles.show-khusus');
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+    Route::get('/berita/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
     Route::post('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
@@ -105,8 +104,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/yurisprudensi', [YurisprudensiController::class, 'destroy'])->name('yurisprudensi.destroy');
 
 
-
-
     // TENTANG
     Route::get('/sejarah/create', [SejarahController::class, 'create'])->name('sejarah.create');
     Route::post('/sejarah', [SejarahController::class, 'store'])->name('sejarah.store');
@@ -137,6 +134,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/infografis/{id}/edit', [InfografisController::class, 'edit'])->name('infografis.edit');
     Route::post('/infografis/{id}', [InfografisController::class, 'update'])->name('infografis.update');
     Route::delete('/infografis', [InfografisController::class, 'destroy'])->name('infografis.destroy');
+
+
+    // GALERI //
+    // FOTO
+    Route::get('/foto', [GaleriController::class, 'indexFoto'])->name('foto.list');
+    Route::get('/foto/create', [GaleriController::class, 'createFoto'])->name('foto.create');
+    Route::post('/foto', [GaleriController::class, 'storeFoto'])->name('foto.store');
+    Route::get('/foto/{id}/edit', [GaleriController::class, 'editFoto'])->name('foto.edit');
+    Route::post('/foto/{id}', [GaleriController::class, 'updateFoto'])->name('foto.update');
+    Route::delete('/foto', [GaleriController::class, 'destroyFoto'])->name('foto.destroy');
+
+    // VIDEO
+    Route::get('/video', [GaleriController::class, 'indexVideo'])->name('video.list');
+    Route::get('/video/create', [GaleriController::class, 'createVideo'])->name('video.create');
+    Route::post('/video', [GaleriController::class, 'storeVideo'])->name('video.store');
+    Route::get('/video/{id}/edit', [GaleriController::class, 'editVideo'])->name('video.edit');
+    Route::post('/video/{id}', [GaleriController::class, 'updateVideo'])->name('video.update');
+    Route::delete('/video', [GaleriController::class, 'destroyVideo'])->name('video.destroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -28,8 +28,9 @@ class Slider extends Model implements HasMedia
     protected $fillable = [
         'judul',
         'sub_judul',
-        'judul_tombol',
+        // 'judul_tombol',
         'tombol_url',
+        'penempatan',
         // 'file',
     ];
 }

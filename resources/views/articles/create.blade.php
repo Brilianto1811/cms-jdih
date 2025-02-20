@@ -27,6 +27,62 @@
 
                 <form action="{{ route('articles.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
+                        <h3 class="text-lg font-semibold mb-4 text-center">Kategori Topik dan Status</h3>
+                        <div class="mb-2">
+                            <label for="kategori_konten" class="text-lg font-medium">Kategori Konten</label>
+                            <select name="kategori_konten" id="kategori_konten"
+                                class="border-gray-300 shadow-sm w-full rounded-lg p-2" onchange="toggleReadonly()">
+                                <option value="" {{ old('kategori_konten') == '' ? 'selected' : '' }}>Pilih
+                                    Kategori
+                                </option>
+                                <option value="warta" {{ old('kategori_konten') == 'warta' ? 'selected' : '' }}>
+                                    Warta
+                                </option>
+                                <option value="khusus" {{ old('kategori_konten') == 'khusus' ? 'selected' : '' }}>
+                                    Kategori
+                                    Khusus</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label for="spesial_kategori" class="text-lg font-medium">Topik</label>
+                                <select id="spesial_kategori" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    <option value="" {{ old('spesial_kategori') == '' ? 'selected' : '' }}>Pilih
+                                        Topik</option>
+                                    <option value="terkini"
+                                        {{ old('spesial_kategori') == 'terkini' ? 'selected' : '' }}>
+                                        Terkini</option>
+                                    <option value="terpopuler"
+                                        {{ old('spesial_kategori') == 'terpopuler' ? 'selected' : '' }}>Terpopuler
+                                    </option>
+                                    <option value="spesial" hidden
+                                        {{ old('spesial_kategori') == 'spesial' ? 'selected' : '' }}>
+                                        Spesial</option>
+                                </select>
+                                <input type="hidden" name="spesial_kategori" id="spesial_kategori_hidden"
+                                    value="{{ old('spesial_kategori') }}">
+                            </div>
+                            <div>
+                                <label for="status_publish" class="text-lg font-medium">Status Publish</label>
+                                <select id="status_publish" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    <option value="" {{ old('status_publish') == '' ? 'selected' : '' }}>Pilih
+                                        Status Publish</option>
+                                    <option value="validasi"
+                                        {{ old('status_publish') == 'validasi' ? 'selected' : '' }}>
+                                        Perlu Validasi
+                                    </option>
+                                    <option value="spesial" hidden
+                                        {{ old('status_publish') == 'spesial' ? 'selected' : '' }}>
+                                        Spesial</option>
+                                </select>
+                                <input type="hidden" name="status_publish" id="status_publish_hidden"
+                                    value="{{ old('status_publish') }}">
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label for="title" class="text-lg font-medium">Judul</label>
@@ -71,52 +127,7 @@
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div>
-                            <label for="kategori_konten" class="text-lg font-medium">Kategori Konten</label>
-                            <select name="kategori_konten" id="kategori_konten"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2" onchange="toggleReadonly()">
-                                <option value="" {{ old('kategori_konten') == '' ? 'selected' : '' }}>Pilih
-                                    Kategori
-                                </option>
-                                <option value="warta" {{ old('kategori_konten') == 'warta' ? 'selected' : '' }}>Warta
-                                </option>
-                                <option value="khusus" {{ old('kategori_konten') == 'khusus' ? 'selected' : '' }}>
-                                    Kategori
-                                    Khusus</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="spesial_kategori" class="text-lg font-medium">Topik</label>
-                            <select id="spesial_kategori" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                <option value="" {{ old('spesial_kategori') == '' ? 'selected' : '' }}>Pilih
-                                    Topik</option>
-                                <option value="terkini" {{ old('spesial_kategori') == 'terkini' ? 'selected' : '' }}>
-                                    Terkini</option>
-                                <option value="terpopuler"
-                                    {{ old('spesial_kategori') == 'terpopuler' ? 'selected' : '' }}>Terpopuler
-                                </option>
-                                <option value="spesial" hidden
-                                    {{ old('spesial_kategori') == 'spesial' ? 'selected' : '' }}>
-                                    Spesial</option>
-                            </select>
-                            <input type="hidden" name="spesial_kategori" id="spesial_kategori_hidden"
-                                value="{{ old('spesial_kategori') }}">
-                        </div>
-                        <div>
-                            <label for="status_publish" class="text-lg font-medium">Status Publish</label>
-                            <select id="status_publish" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                <option value="" {{ old('status_publish') == '' ? 'selected' : '' }}>Pilih
-                                    Status Publish</option>
-                                <option value="validasi" {{ old('status_publish') == 'validasi' ? 'selected' : '' }}>
-                                    Perlu Validasi
-                                </option>
-                                <option value="spesial" hidden
-                                    {{ old('status_publish') == 'spesial' ? 'selected' : '' }}>
-                                    Spesial</option>
-                            </select>
-                            <input type="hidden" name="status_publish" id="status_publish_hidden"
-                                value="{{ old('status_publish') }}">
-                        </div>
+
 
                         <div class="col-span-2">
                             <label for="editor" class="text-lg font-medium">Isi Konten</label>
@@ -202,7 +213,6 @@
                     const toolbarContainer = document.querySelector('.toolbar-container');
                     toolbarContainer.appendChild(editor.ui.view.toolbar.element);
 
-                    // Simpan isi editor ke input hidden sebelum submit form
                     editor.model.document.on('change:data', () => {
                         document.querySelector("#editor-content").value = editor.getData();
                     });
@@ -217,7 +227,6 @@
                 $('#preview').html(contents);
             });
 
-            // Saat halaman dimuat, isi preview dengan teks lama
             let initialContent = $('#editor').ckeditor('code');
             $('#preview').html(initialContent);
         });
@@ -232,42 +241,34 @@
             let hiddenStatusArticles = document.getElementById("status_publish_hidden");
 
             if (kategori === "khusus") {
-                // Set value otomatis dan readonly
                 spesialKategori.value = "spesial";
                 statusArticles.value = "spesial";
                 summary.value = "Konten ini termasuk kategori khusus.";
                 caption.value = "Konten ini termasuk kategori khusus.";
 
-                // Jadikan readonly
                 spesialKategori.setAttribute("disabled", "true");
                 statusArticles.setAttribute("disabled", "true");
                 summary.setAttribute("readonly", "true");
                 caption.setAttribute("readonly", "true");
 
-                // Set value hidden agar tetap dikirim ke backend
                 hiddenSpesialKategori.value = "spesial";
                 hiddenStatusArticles.value = "spesial";
             } else {
-                // Aktifkan kembali jika bukan "khusus"
                 spesialKategori.removeAttribute("disabled");
                 statusArticles.removeAttribute("disabled");
                 summary.removeAttribute("readonly");
                 caption.removeAttribute("readonly");
 
-                // spesialKategori.value = "{{ old('spesial_kategori') }}";
-                // statusArticles.value = "{{ old('status_articles') }}";
-                hiddenSpesialKategori.value = spesialKategori.value;
-                hiddenStatusArticles.value = statusArticles.value;
-                summary.value = "{{ old('summary') }}";
-                caption.value = "{{ old('caption') }}";
-
-                // Reset nilai jika kategori berubah
-                // hiddenSpesialKategori.value = "";
-                // hiddenStatusArticles.value = "";
+                spesialKategori.value = "";
+                statusArticles.value = "";
                 summary.value = "";
                 caption.value = "";
+
+                hiddenSpesialKategori.value = "";
+                hiddenStatusArticles.value = "";
             }
         }
+
         document.getElementById("spesial_kategori").addEventListener("change", function() {
             document.getElementById("spesial_kategori_hidden").value = this.value;
         });
@@ -275,6 +276,7 @@
         document.getElementById("status_publish").addEventListener("change", function() {
             document.getElementById("status_publish_hidden").value = this.value;
         });
+
         window.onload = function() {
             toggleReadonly();
         };

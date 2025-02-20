@@ -13,43 +13,19 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
-            <div class="overflow-x-auto max-w-full">
-                <table class="min-w-full table-auto">
-                    <thead class="bg-gray-500 text-white">
-                        <tr class="border-b">
-                            <th class="px-6 py-4 text-left">NO</th>
-                            <th class="px-6 py-4 text-left whitespace-nowrap">Tanggal Agenda</th>
-                            <th class="px-6 py-4 text-center whitespace-nowrap w-40">Action</th>
+            <div class="overflow-x-auto">
+                <table id="sliderTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
+                    <thead class="bg-gray-50">
+                        <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                            <th class="px-4 py-2 border-b">Tanggal Agenda</th>
+                            <th class="px-4 py-2 border-b">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white">
-                        @if ($agenda->isNotEmpty())
-                            @foreach ($agenda as $item)
-                                <tr class="border-b">
-                                    <td class="px-6 py-4 text-left">
-                                        {{ $loop->iteration }}
-                                    </td>
-                                    <td class="px-6 py-4 text-left">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_kegiatan)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center whitespace-nowrap">
-                                        @can('edit agenda')
-                                            <a href="{{ route('agenda.edit', $item->id) }}"
-                                                class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                        @endcan
-
-                                        @can('delete agenda')
-                                            <a href="javascript:void(0)" onclick="deleteAgenda({{ $item->id }})"
-                                                class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        <!-- DataTables akan mengisi data di sini -->
                     </tbody>
                 </table>
             </div>
-            {{ $agenda->links() }}
         </div>
     </div>
     <x-slot name="script">
@@ -73,6 +49,57 @@
                     });
                 }
             }
+            $(document).ready(function() {
+                $('#sliderTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('agenda.list') }}",
+                    columns: [{
+                            data: 'tgl_agenda',
+                            name: 'tgl_agenda'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    responsive: true,
+                    pagingType: 'full_numbers',
+                    language: {
+                        paginate: {
+                            first: '«',
+                            previous: '‹',
+                            next: '›',
+                            last: '»'
+                        },
+                        search: 'Cari:',
+                        lengthMenu: 'Tampilkan _MENU_ data per halaman',
+                        info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data',
+                        infoEmpty: 'Tidak ada data yang ditampilkan',
+                        infoFiltered: '(disaring dari _MAX_ total data)',
+                        zeroRecords: 'Tidak ada data yang cocok',
+                    },
+                    dom: '<"flex flex-col md:flex-row justify-between items-center gap-4 mb-4"lf>rt<"flex flex-col md:flex-row justify-between items-center mt-4 gap-4"ip>',
+                    drawCallback: function() {
+                        // Styling untuk dropdown "Tampilkan"
+                        $('select').addClass('border-gray-300 rounded-md p-2');
+
+                        $('table').addClass('w-full border-collapse border border-gray-300');
+                        $('th, td').addClass('px-4 py-2 border');
+
+                        // Styling untuk input pencarian
+                        $('input[type="search"]').addClass('border-gray-300 rounded-md p-2 ml-2');
+
+                        // Styling untuk pagination
+                        $('.dataTables_paginate').addClass('flex gap-2 justify-center md:justify-end mt-4');
+                        $('.dataTables_paginate .paginate_button').addClass(
+                            'px-3 py-1 border border-gray-300 rounded-md bg-white hover:bg-gray-200 transition'
+                        );
+                    }
+                });
+            });
         </script>
     </x-slot>
 </x-app-layout>

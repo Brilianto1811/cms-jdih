@@ -13,25 +13,22 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
-            <table id="sliderTable" class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub
-                            Judul</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul
-                            Tombol</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tombol Url</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <!-- Data akan diambil melalui AJAX -->
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table id="sliderTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
+                    <thead class="bg-gray-50">
+                        <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                            <th class="px-4 py-2 border-b">Judul</th>
+                            <th class="px-4 py-2 border-b">Sub Judul</th>
+                            <th class="px-4 py-2 border-b">Penempatan</th>
+                            <th class="px-4 py-2 border-b">Tombol Url</th>
+                            <th class="px-4 py-2 border-b">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        <!-- DataTables akan mengisi data di sini -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <x-slot name="script">
@@ -69,8 +66,8 @@
                             name: 'sub_judul'
                         },
                         {
-                            data: 'judul_tombol',
-                            name: 'judul_tombol'
+                            data: 'penempatan',
+                            name: 'penempatan'
                         },
                         {
                             data: 'tombol_url',
@@ -83,7 +80,7 @@
                             searchable: false
                         },
                     ],
-                    responsive: true, // Aktifkan responsive
+                    responsive: true,
                     pagingType: 'full_numbers',
                     language: {
                         paginate: {
@@ -98,6 +95,23 @@
                         infoEmpty: 'Tidak ada data yang ditampilkan',
                         infoFiltered: '(disaring dari _MAX_ total data)',
                         zeroRecords: 'Tidak ada data yang cocok',
+                    },
+                    dom: '<"flex flex-col md:flex-row justify-between items-center gap-4 mb-4"lf>rt<"flex flex-col md:flex-row justify-between items-center mt-4 gap-4"ip>',
+                    drawCallback: function() {
+                        // Styling untuk dropdown "Tampilkan"
+                        $('select').addClass('border-gray-300 rounded-md p-2');
+
+                        $('table').addClass('w-full border-collapse border border-gray-300');
+                        $('th, td').addClass('px-4 py-2 border');
+
+                        // Styling untuk input pencarian
+                        $('input[type="search"]').addClass('border-gray-300 rounded-md p-2 ml-2');
+
+                        // Styling untuk pagination
+                        $('.dataTables_paginate').addClass('flex gap-2 justify-center md:justify-end mt-4');
+                        $('.dataTables_paginate .paginate_button').addClass(
+                            'px-3 py-1 border border-gray-300 rounded-md bg-white hover:bg-gray-200 transition'
+                        );
                     }
                 });
             });

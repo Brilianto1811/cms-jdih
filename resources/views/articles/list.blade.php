@@ -14,67 +14,23 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
-            <div class="overflow-x-auto max-w-full">
-                <table class="min-w-full table-auto">
-                    <thead class="bg-gray-500 text-white">
-                        <tr class="border-b">
-                            <th class="px-6 py-4 text-left">No</th>
-                            <th class="px-6 py-4 text-center whitespace-nowrap w-40">Action</th>
-                            <th class="px-6 py-4 text-left whitespace-nowrap">Status Publish</th>
-                            <th class="px-6 py-4 text-left whitespace-nowrap">Judul</th>
-                            <th class="px-6 py-4 text-left whitespace-nowrap">Isi Konten</th>
-                            <th class="px-6 py-4 text-left whitespace-nowrap">Tanggal Publish</th>
+            <div class="overflow-x-auto">
+                <table id="articlesTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
+                    <thead class="bg-gray-50">
+                        <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                            <th class="px-4 py-2 border-b">No</th>
+                            <th class="px-4 py-2 border-b">Status Publish</th>
+                            <th class="px-4 py-2 border-b">Judul</th>
+                            <th class="px-4 py-2 border-b">Isi Konten</th>
+                            <th class="px-4 py-2 border-b">Tanggal Publish</th>
+                            <th class="px-4 py-2 border-b">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white">
-                        @if ($articles->isNotEmpty())
-                            @foreach ($articles as $article)
-                                <tr class="border-b">
-                                    <td class="px-6 py-4 text-left">{{ $loop->iteration }}</td>
-                                    <td class="px-6 py-4 text-center whitespace-nowrap">
-                                        @can('edit articles')
-                                            <a href="{{ route('articles.edit', $article->id) }}"
-                                                class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                        @endcan
-
-                                        @can('show articles')
-                                            <a href="{{ route('articles.show-khusus', $article->slug) }}"
-                                                class="bg-yellow-400 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Lihat</a>
-                                        @endcan
-
-                                        @can('delete articles')
-                                            <a href="javascript:void(0)" onclick="deleteArticle({{ $article->id }})"
-                                                class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                        @endcan
-                                    </td>
-                                    <td class="px-6 py-4 text-center whitespace-nowrap">
-                                        @php
-                                            $statusClasses = [
-                                                'Publish' => 'bg-green-500 text-white',
-                                                'Draft' => 'bg-gray-500 text-white',
-                                                'Pending' => 'bg-orange-500 text-white',
-                                                'Reject' => 'bg-red-500 text-white',
-                                                'Perlu Validasi' => 'bg-orange-500 text-white',
-                                                'spesial' => 'bg-blue-500 text-white',
-                                            ];
-                                            $statusClass =
-                                                $statusClasses[$article->status_publish] ?? 'bg-gray-500 text-white';
-                                        @endphp
-                                        <span class="px-3 py-1 rounded-md text-sm font-medium bg-b {{ $statusClass }}">
-                                            {{ $article->status_publish }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-left">{{ $article->title }}</td>
-                                    <td class="px-6 py-4 text-left">
-                                        {{ Str::limit(strip_tags($article->text), 150, '...') }}</td>
-                                    <td class="px-6 py-4 text-left whitespace-nowrap">{{ $article->tgl_publish }}</td>
-                                </tr>
-                            @endforeach
-                        @endif
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        <!-- DataTables akan mengisi data di sini -->
                     </tbody>
                 </table>
             </div>
-            {{ $articles->links() }}
         </div>
     </div>
     <x-slot name="script">
@@ -98,6 +54,66 @@
                     });
                 }
             }
+
+            $(document).ready(function() {
+                $('#articlesTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('articles.list') }}",
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'status_publish',
+                            name: 'status_publish'
+                        },
+                        {
+                            data: 'title',
+                            name: 'title'
+                        },
+                        {
+                            data: 'text',
+                            name: 'text'
+                        },
+                        {
+                            data: 'tgl_publish',
+                            name: 'tgl_publish'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    responsive: true,
+                    pagingType: 'full_numbers',
+                    language: {
+                        paginate: {
+                            first: '«',
+                            previous: '‹',
+                            next: '›',
+                            last: '»'
+                        },
+                        search: 'Cari:',
+                        lengthMenu: 'Tampilkan _MENU_ data per halaman',
+                        info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data',
+                        infoEmpty: 'Tidak ada data yang ditampilkan',
+                        infoFiltered: '(disaring dari _MAX_ total data)',
+                        zeroRecords: 'Tidak ada data yang cocok'
+                    },
+                    dom: '<"flex flex-row justify-between items-center gap-4 mb-4"lf>rt<"flex flex-row justify-between items-center mt-4 gap-4"ip>',
+                    drawCallback: function() {
+                        $('select').addClass('border-gray-300 rounded-md p-2');
+                        $('table').addClass('w-full border-collapse border border-gray-300');
+                        $('th, td').addClass('px-4 py-2 border');
+                        $('input[type="search"]').addClass('border-gray-300 rounded-md p-2 ml-2');
+                    }
+                });
+            });
         </script>
     </x-slot>
 </x-app-layout>

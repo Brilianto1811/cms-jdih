@@ -2,160 +2,139 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Articles / Edit
+                Slider / Edit
             </h2>
-            <a href="{{ route('articles.list') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2">Back</a>
+            <a href="{{ route('slider.list') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2">
+                Kembali
+            </a>
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if ($errors->any())
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-3"
-                            role="alert">
-                            <strong class="font-bold">Terjadi kesalahan!</strong>
-                            <ul class="mt-2">
-                                @foreach ($errors->all() as $error)
-                                    <li>- {{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                @if ($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-3"
+                        role="alert">
+                        <strong class="font-bold">Terjadi kesalahan!</strong>
+                        <ul class="mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>- {{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-                    <form action="{{ route('articles.update', $articles->id) }}" method="post"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label for="title" class="text-lg font-medium">Judul</label>
-                                <input value="{{ old('title', $articles->title) }}" name="title" placeholder="Title"
-                                    type="text" class="border-gray-300 shadow-sm w-full rounded-lg">
-                                @error('title')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="author" class="text-lg font-medium">Penulis</label>
-                                <input value="{{ old('author', $articles->author) }}" name="author"
-                                    placeholder="Author" type="text"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg">
-                                @error('author')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="caption_image" class="text-lg font-medium">Caption Gambar</label>
-                                <input value="{{ old('caption_image', $articles->caption_image) }}" name="caption_image"
-                                    placeholder="Caption Gambar" type="text"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg">
-                                @error('caption_image')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            {{-- <div>
-                                <label for="tags" class="text-lg font-medium">Tags/Kata Kunci</label>
-                                <input id="tags" name="tags" placeholder="Tags" type="text"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg advance-options"
-                                    value="{{ old('tags', implode(',', json_decode($articles->tags))) }}">
-                                @error('tags')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div> --}}
-                            <div>
-                                <label for="tags" class="text-lg font-medium">Tags/Kata Kunci</label>
-                                <input id="tags" name="tags" placeholder="Tags" type="text"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg advance-options">
-                                @error('tags')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="tgl_publish" class="text-lg font-medium">Tanggal Publish</label>
-                                <input value="{{ old('tgl_publish', $articles->tgl_publish) }}" name="tgl_publish"
-                                    placeholder="Tanggal Publish" type="date"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg">
-                                @error('tgl_publish')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="status_publish" class="text-lg font-medium">Status Publish</label>
-                                <select name="status_publish" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                    <option value="Publish"
-                                        {{ old('status_publish', $articles->status_publish) == 'Publish' ? 'selected' : '' }}>
-                                        Publish</option>
-                                    <option value="Draft"
-                                        {{ old('status_publish', $articles->status_publish) == 'Draft' ? 'selected' : '' }}>
-                                        Draft
-                                    </option>
-                                    <option value="Pending"
-                                        {{ old('status_publish', $articles->status_publish) == 'Pending' ? 'selected' : '' }}>
-                                        Pending</option>
-                                    <option value="Reject"
-                                        {{ old('status_publish', $articles->status_publish) == 'Reject' ? 'selected' : '' }}>
-                                        Reject
-                                    </option>
-                                </select>
-                                @error('status_publish')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div class="col-span-2">
-                                <label for="editor" class="text-lg font-medium">Isi Konten</label>
-                                <div class="toolbar-container"></div>
-                                <div id="editor" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                    {!! old('text', $articles->text ?? '') !!}
+                <form action="{{ route('slider.update', $slider->id) }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Judul</h3>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label for="judul" class="text-lg font-medium">Judul</label>
+                                    <input value="{{ old('judul', $slider->judul) }}" name="judul" placeholder="Judul"
+                                        type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('judul')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <input type="hidden" name="text" id="editor-content"
-                                    value="{{ old('text', $articles->text ?? '') }}">
-                                @error('text')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
 
-                            <div class="col-span-2">
-                                <label for="summary" class="text-lg font-medium">Ringkasan/Summary</label>
-                                <textarea name="summary" placeholder="Content" class="border-gray-300 shadow-sm w-full rounded-lg" id="text"
-                                    cols="30" rows="5">{{ old('summary', $articles->summary) }}</textarea>
-                                @error('summary')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="col-span-2">
-                                <label for="caption" class="text-lg font-medium">Caption</label>
-                                <textarea name="caption" placeholder="Content" class="border-gray-300 shadow-sm w-full rounded-lg" id="text"
-                                    cols="30" rows="5">{{ old('caption', $articles->caption) }}</textarea>
-                                @error('caption')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="file" class="text-lg font-medium">Upload Image</label>
-                                <input type="file" name="file"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg" id="imageInput">
-                                @error('file')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div class="col-span-2">
-                                <img id="imagePreview" class="hidden w-40 h-40 object-cover rounded-md shadow-md">
+                                <div>
+                                    <label for="sub_judul" class="text-lg font-medium">Sub Judul</label>
+                                    <input value="{{ old('sub_judul', $slider->sub_judul) }}" name="sub_judul"
+                                        placeholder="Sub Judul" type="text"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('sub_judul')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
-                        <button
-                            class="bg-slate-700 hover:bg-slate-600 text-sm rounded-md text-white px-5 py-3 mt-4">Update</button>
-                    </form>
-                </div>
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">URL Slider</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="tombol_url" class="text-lg font-medium">Tombol Url</label>
+                                    <input value="{{ old('tombol_url', $slider->tombol_url) }}" name="tombol_url"
+                                        placeholder="Tombol Url" type="text"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('tombol_url')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Penempatan Slider</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="penempatan" class="text-lg font-medium">Penempatan</label>
+                                    <select name="penempatan" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                        <option>Pilih Penempatan</option>
+                                        <option value="Header"
+                                            {{ old('penempatan', $slider->penempatan) == 'Header' ? 'selected' : '' }}>
+                                            Header</option>
+                                        <option value="Main Utama"
+                                            {{ old('penempatan', $slider->penempatan) == 'Main Utama' ? 'selected' : '' }}>
+                                            Main Utama</option>
+                                        <option value="Main Tengah"
+                                            {{ old('penempatan', $slider->penempatan) == 'Main Tengah' ? 'selected' : '' }}>
+                                            Main Tengah
+                                        </option>
+                                        <option value="Main Bawah"
+                                            {{ old('penempatan', $slider->penempatan) == 'Main Bawah' ? 'selected' : '' }}>
+                                            Main Bawah
+                                        </option>
+                                        <option value="Sidebar Atas"
+                                            {{ old('penempatan', $slider->penempatan) == 'Sidebar Atas' ? 'selected' : '' }}>
+                                            Sidebar Atas
+                                        </option>
+                                        <option value="Sidebar Bawah"
+                                            {{ old('penempatan', $slider->penempatan) == 'Sidebar Bawah' ? 'selected' : '' }}>
+                                            Sidebar Bawah
+                                        </option>
+                                        <option value="Sebelum Footer"
+                                            {{ old('penempatan', $slider->penempatan) == 'Sebelum Footer' ? 'selected' : '' }}>
+                                            Sebelum Footer
+                                        </option>
+                                        <option value="Footer"
+                                            {{ old('penempatan', $slider->penempatan) == 'Footer' ? 'selected' : '' }}>
+                                            Footer
+                                        </option>
+                                    </select>
+                                    @error('penempatan')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Gambar</h3>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="file" class="text-lg font-medium">Mengunggah Gambar</label>
+                                    <input type="file" name="file[]" value="{{ old('file', $slider->file) }}"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
+                                    @error('file')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                    <img id="imagePreview"
+                                        class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-right">
+                        <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const imageInput = document.getElementById('imageInput');
@@ -174,65 +153,6 @@
                     }
                 });
             }
-
-            $('#summernote').summernote({
-                placeholder: 'Isi Konten',
-                tabsize: 2,
-                height: 120,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var input = document.querySelector("#tags");
-
-            var tagsFromLaravel = {!! json_encode(json_decode($articles->tags)) !!} || [];
-
-            var tagify = new Tagify(input, {
-                whitelist: [],
-                maxTags: 10,
-                enforceWhitelist: false,
-                delimiters: " ",
-                dropdown: {
-                    enabled: 0
-                }
-            });
-
-            tagify.addTags(tagsFromLaravel);
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            DecoupledEditor.create(document.querySelector('#editor'))
-                .then(editor => {
-                    const toolbarContainer = document.querySelector('.toolbar-container');
-                    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-
-                    // Simpan isi editor ke input hidden sebelum submit form
-                    editor.model.document.on('change:data', () => {
-                        document.querySelector("#editor-content").value = editor.getData();
-                    });
-
-                    window.editor = editor;
-                })
-                .catch(error => {
-                    console.error('Error initializing CKEditor:', error);
-                });
-
-            $('#editor').on('editor.change', function(_, contents) {
-                $('#preview').html(contents);
-            });
-
-            // Saat halaman dimuat, isi preview dengan teks lama
-            let initialContent = $('#editor').ckeditor('code');
-            $('#preview').html(initialContent);
         });
     </script>
 </x-app-layout>
