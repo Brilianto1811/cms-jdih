@@ -40,8 +40,7 @@
                                     Warta
                                 </option>
                                 <option value="khusus" {{ old('kategori_konten') == 'khusus' ? 'selected' : '' }}>
-                                    Kategori
-                                    Khusus</option>
+                                    Kategori Khusus</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-2 gap-6">
@@ -68,8 +67,8 @@
                                 <select id="status_publish" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
                                     <option value="" {{ old('status_publish') == '' ? 'selected' : '' }}>Pilih
                                         Status Publish</option>
-                                    <option value="validasi"
-                                        {{ old('status_publish') == 'validasi' ? 'selected' : '' }}>
+                                    <option value="perlu validasi"
+                                        {{ old('status_publish') == 'perlu validasi' ? 'selected' : '' }}>
                                         Perlu Validasi
                                     </option>
                                     <option value="spesial" hidden
@@ -82,91 +81,100 @@
                         </div>
                     </div>
 
-
-                    <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <label for="title" class="text-lg font-medium">Judul</label>
-                            <input value="{{ old('title') }}" name="title" placeholder="Judul" type="text"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('title')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="author" class="text-lg font-medium">Penulis</label>
-                            <input value="{{ old('author') }}" name="author" placeholder="Penulis" type="text"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('author')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="caption_image" class="text-lg font-medium">Caption Gambar</label>
-                            <input value="{{ old('caption_image') }}" name="caption_image" placeholder="Caption Gambar"
-                                type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('caption_image')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label for="tags" class="text-lg font-medium">Tags/Kata Kunci</label>
-                            <input id="tags" name="tags" placeholder="Tags" type="text"
-                                class="border-gray-300 shadow-sm w-full rounded-lg advance-options"
-                                value="{{ old('tags') }}">
-                            @error('tags')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label for="tgl_publish" class="text-lg font-medium">Tanggal Publish</label>
-                            <input value="{{ old('tgl_publish') }}" name="tgl_publish" placeholder="Tanggal Publish"
-                                type="date" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                            @error('tgl_publish')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-
-                        <div class="col-span-2">
-                            <label for="editor" class="text-lg font-medium">Isi Konten</label>
-                            <div class="toolbar-container"></div>
-                            <div id="editor" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                {!! old('text') !!}
+                    <div>
+                        <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Judul dan Isi Konten</h3>
+                            <div class="mb-2">
+                                <label for="title" class="text-lg font-medium">Judul</label>
+                                <input value="{{ old('title') }}" name="title" placeholder="Judul" type="text"
+                                    class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                @error('title')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
                             </div>
-                            <input type="hidden" name="text" id="editor-content" value="{{ old('text') }}">
-                            @error('text')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                            <div>
+                                <label for="editor" class="text-lg font-medium">Isi Konten</label>
+                                <div class="toolbar-container"></div>
+                                <div id="editor" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    {!! old('text') !!}
+                                </div>
+                                <input type="hidden" name="text" id="editor-content" value="{{ old('text') }}">
+                                @error('text')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
-
-                        <div class="col-span-2">
-                            <label for="summary" class="text-lg font-medium">Ringkasan/Summary</label>
-                            <textarea name="summary" id="summary" placeholder="Ringkasan/Summary"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2">{{ old('summary') }}</textarea>
-                            @error('summary')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Ringkasan dan Caption</h3>
+                            <div class="mb-2">
+                                <label for="summary" class="text-lg font-medium">Ringkasan/Summary</label>
+                                <textarea name="summary" id="summary" placeholder="Ringkasan/Summary"
+                                    class="border-gray-300 shadow-sm w-full rounded-lg p-2">{{ old('summary') }}</textarea>
+                                @error('summary')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="col-span-2">
+                                    <label for="caption" class="text-lg font-medium">Caption</label>
+                                    <textarea name="caption" id="caption" placeholder="Caption" class="border-gray-300 shadow-sm w-full rounded-lg p-2">{{ old('caption') }}</textarea>
+                                    @error('caption')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="caption_image" class="text-lg font-medium">Caption Gambar</label>
+                                    <input value="{{ old('caption_image') }}" name="caption_image"
+                                        placeholder="Caption Gambar" type="text"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('caption_image')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="author" class="text-lg font-medium">Penulis</label>
+                                    <input value="{{ old('author') }}" name="author" placeholder="Penulis"
+                                        type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('author')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
+                        <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Tanggal Publish dan Tambah Gambar</h3>
 
-                        <div class="col-span-2">
-                            <label for="caption" class="text-lg font-medium">Caption</label>
-                            <textarea name="caption" id="caption" placeholder="Caption"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2">{{ old('caption') }}</textarea>
-                            @error('caption')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="file" class="text-lg font-medium">Upload Image</label>
-                            <input type="file" name="file[]" id="file"
-                                class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
-                            @error('file')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                            <img id="imagePreview" class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label for="tags" class="text-lg font-medium">Tags/Kata Kunci</label>
+                                    <input id="tags" name="tags" placeholder="Tags" type="text"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg advance-options"
+                                        value="{{ old('tags') }}">
+                                    @error('tags')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="tgl_publish" class="text-lg font-medium">Tanggal Publish</label>
+                                    <input value="{{ old('tgl_publish') }}" name="tgl_publish"
+                                        placeholder="Tanggal Publish" type="date"
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    @error('tgl_publish')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-span-2">
+                                    <label for="file" class="text-lg font-medium">Tambah Gambar</label>
+                                    <input type="file" name="file[]" multiple
+                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
+                                    @error('file')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                    <div id="imagePreviewContainer" class="mt-3 flex gap-2 flex-wrap"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-6 text-right">
@@ -190,18 +198,27 @@
             });
 
             const imageInput = document.getElementById('imageInput');
-            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
             if (imageInput) {
                 imageInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            imagePreview.src = e.target.result;
-                            imagePreview.classList.remove('hidden');
-                        };
-                        reader.readAsDataURL(file);
+                    imagePreviewContainer.innerHTML = ""; // Bersihkan preview sebelumnya
+                    const files = event.target.files;
+
+                    if (files.length > 0) {
+                        Array.from(files).forEach(file => {
+                            if (file.type.startsWith("image/")) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    const imgElement = document.createElement("img");
+                                    imgElement.src = e.target.result;
+                                    imgElement.classList.add("w-40", "h-40", "object-cover",
+                                        "rounded-md", "shadow-md");
+                                    imagePreviewContainer.appendChild(imgElement);
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
                     }
                 });
             }

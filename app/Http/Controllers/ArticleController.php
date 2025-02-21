@@ -42,11 +42,14 @@ class ArticleController extends Controller implements HasMiddleware
                 ->addColumn('action', function ($item) {
                     return view('articles.action', compact('item'))->render();
                 })
+                ->addColumn('tgl_publish', function ($row) {
+                    return \Carbon\Carbon::parse($row->tgl_publish)
+                        ->locale('id')->isoFormat('dddd, D MMMM YYYY');
+                })
                 ->addColumn('status_publish', function ($item) {
                     $statusClasses = [
                         'Publish' => 'bg-green-500 text-white',
                         'Draft' => 'bg-gray-500 text-white',
-                        'Pending' => 'bg-orange-500 text-white',
                         'Reject' => 'bg-red-500 text-white',
                         'Perlu Validasi' => 'bg-orange-500 text-white',
                         'spesial' => 'bg-blue-500 text-white',
@@ -98,6 +101,7 @@ class ArticleController extends Controller implements HasMiddleware
         ], [
             'title.required' => 'Judul Konten harus diisi.',
             'title.min' => 'Judul minimal 3 karakter.',
+            'text.required' => 'Isi Konten harus diisi.',
             'author.required' => 'Penulis Konten  harus diisi.',
             'author.min' => 'Penulis Konten minimal 3 karakter.',
             'file.*.mimes' => 'File harus berupa gambar (jpg, jpeg, png).',

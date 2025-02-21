@@ -19,7 +19,7 @@
                     <thead class="bg-gray-50">
                         <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
                             <th class="px-4 py-2 border-b">No</th>
-                            <th class="px-4 py-2 border-b">Status Publish</th>
+                            <th class="px-4 py-2 border-b w-32 min-w-[150px]">Status Publish</th>
                             <th class="px-4 py-2 border-b">Judul</th>
                             <th class="px-4 py-2 border-b">Isi Konten</th>
                             <th class="px-4 py-2 border-b">Tanggal Publish</th>
@@ -89,6 +89,10 @@
                             searchable: false
                         }
                     ],
+                    columnDefs: [{
+                        width: "150px",
+                        targets: 1
+                    }],
                     responsive: true,
                     pagingType: 'full_numbers',
                     language: {
