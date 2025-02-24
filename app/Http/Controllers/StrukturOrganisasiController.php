@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class StrukturOrganisasiController extends Controller implements HasMiddleware
 {
@@ -23,10 +24,27 @@ class StrukturOrganisasiController extends Controller implements HasMiddleware
     /**
      * Menampilkan daftar struktur organisasi
      */
-    public function index()
+    // public function index()
+    // {
+    //     $struktur = StrukturOrganisasi::orderBy('urutan', 'ASC')->paginate(5);
+    //     return view('tentang.struktur-organisasi.list', compact('struktur'));
+    // }
+
+    public function index(Request $request)
     {
-        $struktur = StrukturOrganisasi::orderBy('urutan', 'ASC')->paginate(5);
-        return view('tentang.struktur-organisasi.list', compact('struktur'));
+        if ($request->ajax()) {
+            $struktur = StrukturOrganisasi::latest()->select('id', 'nama', 'jabatan', 'urutan');
+
+            return DataTables::of($struktur)
+                ->addIndexColumn()
+                ->addColumn('action', function ($items) {
+                    return view('tentang.struktur-organisasi.action', compact('items'))->render();
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('tentang.struktur-organisasi.list');
     }
 
     /**

@@ -46,7 +46,8 @@
                         <ul>
                             <li><a href="{{ route('landing.tentang', ['slug' => 'sambutan']) }}"
                                     id="menu-sekapur">Sekapur Sirih</a></li>
-                            <li><a href="#" id="menu-dasar">Dasar Hukum</a></li>
+                            <li><a href="{{ route('landing.tentang', ['slug' => 'dasar-hukum']) }}"
+                                    id="menu-dasar">Dasar Hukum</a></li>
                             <li><a href="{{ route('landing.tentang', ['slug' => 'visi-dan-misi']) }}"
                                     id="menu-visi">Visi
                                     dan Misi</a></li>
