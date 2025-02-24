@@ -138,7 +138,7 @@
 
                         <div>
                             <label for="file" class="text-lg font-medium">Upload Image</label>
-                            <input type="file" name="file[]" multiple
+                            <input type="file" name="file[]"
                                 class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
                             @error('file')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>

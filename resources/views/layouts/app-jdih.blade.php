@@ -23,11 +23,11 @@
         <div class="container mx-auto flex justify-between items-center px-6 md:px-20">
             <!-- Logo -->
             <div class="flex items-center space-x-4">
-                <a href="index.html">
-                    <img src="assets/jdihn.png" alt="Logo JDIHN" class="h-12 w-12">
+                <a href="{{ route('landing.index') }}">
+                    <img src="{{ asset('assets/jdihn.png') }}" alt="Logo JDIHN" class="h-12 w-12">
                 </a>
-                <a href="index.html">
-                    <img src="assets/Logo_DPRD.webp" alt="Logo DPRD" class="h-12 w-12">
+                <a href="{{ route('landing.index') }}">
+                    <img src="{{ asset('assets/Logo_DPRD.webp') }}" alt="Logo DPRD" class="h-12 w-12">
                 </a>
             </div>
             <!-- Hamburger Button -->
@@ -44,11 +44,17 @@
                             <span class="dropdown-icon">▼</span>
                         </a>
                         <ul>
-                            <li><a href="#" id="menu-sekapur">Sekapur Sirih</a></li>
+                            <li><a href="{{ route('landing.tentang', ['slug' => 'sambutan']) }}"
+                                    id="menu-sekapur">Sekapur Sirih</a></li>
                             <li><a href="#" id="menu-dasar">Dasar Hukum</a></li>
-                            <li><a href="#" id="menu-visi">Visi dan Misi</a></li>
+                            <li><a href="{{ route('landing.tentang', ['slug' => 'visi-dan-misi']) }}"
+                                    id="menu-visi">Visi
+                                    dan Misi</a></li>
                             <li><a href="#" id="menu-struktur">Struktur Organisasi</a></li>
-                            <li><a href="#" id="menu-sejarah">Sejarah</a></li>
+                            <li><a href="{{ route('landing.tentang', ['slug' => 'sejarah']) }}"
+                                    id="menu-sejarah">Sejarah</a></li>
+                            <li><a href="{{ route('landing.tentang', ['slug' => 'tugas-pokok-dan-fungsi']) }}"
+                                    id="menu-tugas-pokok">Tugas Pokok dan Fungsi</a></li>
                             <li><a href="#" id="menu-kontak">Kontak</a></li>
                             <li><a href="#" id="menu-sop">Standard Operating Procedure</a></li>
                         </ul>
@@ -120,9 +126,10 @@
                         <ul class="pl-4 mt-2 space-y-2 hidden submenu">
                             <li><a href="#" class="hover:underline">Sekapur Sirih</a></li>
                             <li><a href="#" class="hover:underline">Dasar Hukum</a></li>
-                            <li><a href="#" class="hover:underline">Visi & Misi</a></li>
+                            <li><a href="#" class="hover:underline">Visi dan Misi</a></li>
                             <li><a href="#" class="hover:underline">Struktur Organisasi</a></li>
                             <li><a href="#" class="hover:underline">Sejarah</a></li>
+                            <li><a href="#" class="hover:underline">Tugas Pokok dan Fungsi</a></li>
                             <li><a href="#" class="hover:underline">Kontak</a></li>
                             <li><a href="#" class="hover:underline">Standard Operating Procedure</a></li>
                         </ul>
@@ -195,6 +202,18 @@
     <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
         style="background-image: url('{{ asset('assets/petakab.jpg') }}');">
     </div>
+    {{-- @php
+        $backgroundImage =
+            isset($slider) && $slider->getFirstMediaUrl('images')
+                ? $slider->getFirstMediaUrl('images')
+                : asset('assets/petakab.jpg');
+    @endphp
+
+    <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
+        style="background-image: url('{{ $backgroundImage }}');">
+    </div> --}}
+
+
 
 
     <!-- Section Informasi -->
@@ -223,28 +242,31 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
                 <!-- JDIHN -->
                 <div class="site-card">
-                    <img src="assets/jdihn.png" alt="JDIHN" class="mx-auto h-16 mb-4" />
+                    <img src="{{ asset('assets/jdihn.png') }}" alt="JDIHN" class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIHN</p>
                 </div>
                 <!-- JDIH Jawa Barat -->
                 <div class="site-card">
-                    <img src="assets/jawa-barat.png" alt="JDIH Jawa Barat" class="mx-auto h-16 mb-4" />
+                    <img src="{{ asset('assets/jawa-barat.png') }}" alt="JDIH Jawa Barat"
+                        class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH Jawa Barat</p>
                 </div>
                 <!-- JDIH DPRD Jawa Barat -->
                 <div class="site-card">
-                    <img src="assets/dprd-jawa-barat.png" alt="JDIH DPRD Jawa Barat" class="mx-auto h-16 mb-4" />
+                    <img src="{{ asset('assets/dprd-jawa-barat.png') }}" alt="JDIH DPRD Jawa Barat"
+                        class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH DPRD Jawa Barat</p>
                 </div>
                 <!-- JDIH Kabupaten Bogor -->
                 <div class="site-card">
-                    <img src="assets/Lambang_Kabupaten_Bogor.png" alt="JDIH Kabupaten Bogor"
+                    <img src="{{ asset('assets/Lambang_Kabupaten_Bogor.png') }}" alt="JDIH Kabupaten Bogor"
                         class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH Kabupaten Bogor</p>
                 </div>
                 <!-- DPRD Kabupaten Bogor -->
                 <div class="site-card">
-                    <img src="assets/Logo_DPRD.webp" alt="DPRD Kabupaten Bogor" class="mx-auto h-16 mb-4" />
+                    <img src="{{ asset('assets/Logo_DPRD.webp') }}" alt="DPRD Kabupaten Bogor"
+                        class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">DPRD Kabupaten Bogor</p>
                 </div>
             </div>
@@ -256,8 +278,8 @@
             <div
                 class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-0 md:space-x-4 text-center md:text-left">
                 <div class="flex space-x-4 md:space-x-4">
-                    <img src="assets/jdihn.png" alt="Logo 1" class="h-16 w-16" />
-                    <img src="assets/Logo_DPRD.webp" alt="Logo 2" class="h-16 w-16" />
+                    <img src="{{ asset('assets/jdihn.png') }}" alt="Logo 1" class="h-16 w-16" />
+                    <img src="{{ asset('assets/Logo_DPRD.webp') }}" alt="Logo 2" class="h-16 w-16" />
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold text-yellow-400">JARINGAN DOKUMENTASI DAN INFORMASI HUKUM</h3>

@@ -15,9 +15,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
             <div class="overflow-x-auto">
-                <table id="articlesTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
-                    <thead class="bg-gray-50">
-                        <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                <table id="articlesTable"
+                    class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-base">
+                    <thead class="bg-gray-500">
+                        <tr class="text-left text-base font-semibold text-white">
                             <th class="px-4 py-2 border-b">No</th>
                             <th class="px-4 py-2 border-b w-32 min-w-[150px]">Status Publish</th>
                             <th class="px-4 py-2 border-b">Judul</th>
@@ -33,28 +34,9 @@
             </div>
         </div>
     </div>
+
     <x-slot name="script">
         <script type="text/javascript">
-            window.deleteArticle = function(id) {
-                if (confirm("Are you sure you want to delete?")) {
-                    $.ajax({
-                        url: '{{ route('articles.destroy') }}',
-                        type: 'DELETE',
-                        data: {
-                            id: id,
-                            _token: '{{ csrf_token() }}' // Tambahkan token CSRF di sini
-                        },
-                        dataType: "json",
-                        success: function(response) {
-                            window.location.reload();
-                        },
-                        error: function(xhr) {
-                            alert("Error: " + xhr.responseText);
-                        }
-                    });
-                }
-            }
-
             $(document).ready(function() {
                 $('#articlesTable').DataTable({
                     processing: true,
@@ -115,6 +97,13 @@
                         $('table').addClass('w-full border-collapse border border-gray-300');
                         $('th, td').addClass('px-4 py-2 border');
                         $('input[type="search"]').addClass('border-gray-300 rounded-md p-2 ml-2');
+
+                        // Custom styling for pagination
+                        $('.dataTables_paginate .paginate_button').addClass(
+                            'px-3 py-1 mx-1 rounded-md border bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        );
+                        $('.dataTables_paginate .paginate_button.current').addClass(
+                            'bg-gray-500 text-white');
                     }
                 });
             });

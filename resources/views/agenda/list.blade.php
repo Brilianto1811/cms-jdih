@@ -14,9 +14,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
             <div class="overflow-x-auto">
-                <table id="sliderTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-sm">
-                    <thead class="bg-gray-50">
-                        <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                <table id="sliderTable" class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm text-base">
+                    <thead class="bg-gray-500">
+                        <tr class="text-left text-base font-semibold text-white">
                             <th class="px-4 py-2 border-b">Tanggal Agenda</th>
                             <th class="px-4 py-2 border-b">Action</th>
                         </tr>

@@ -71,6 +71,15 @@
                                         {{ old('status_publish') == 'perlu validasi' ? 'selected' : '' }}>
                                         Perlu Validasi
                                     </option>
+                                    <option value="publish" {{ old('status_publish') == 'publish' ? 'selected' : '' }}>
+                                        Publish
+                                    </option>
+                                    <option value="draft" {{ old('status_publish') == 'draft' ? 'selected' : '' }}>
+                                        Draft
+                                    </option>
+                                    <option value="reject" {{ old('status_publish') == 'reject' ? 'selected' : '' }}>
+                                        Reject
+                                    </option>
                                     <option value="spesial" hidden
                                         {{ old('status_publish') == 'spesial' ? 'selected' : '' }}>
                                         Spesial</option>
@@ -107,15 +116,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
-                            <h3 class="text-lg font-semibold mb-4 text-center">Ringkasan dan Caption</h3>
-                            <div class="mb-2">
-                                <label for="summary" class="text-lg font-medium">Ringkasan/Summary</label>
-                                <textarea name="summary" id="summary" placeholder="Ringkasan/Summary"
-                                    class="border-gray-300 shadow-sm w-full rounded-lg p-2">{{ old('summary') }}</textarea>
-                                @error('summary')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            <h3 class="text-lg font-semibold mb-4 text-center">Caption dan Penulis</h3>
                             <div class="grid grid-cols-2 gap-6">
                                 <div class="col-span-2">
                                     <label for="caption" class="text-lg font-medium">Caption</label>
@@ -125,10 +126,9 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label for="caption_image" class="text-lg font-medium">Caption Gambar</label>
-                                    <input value="{{ old('caption_image') }}" name="caption_image"
-                                        placeholder="Caption Gambar" type="text"
-                                        class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                                    <label for="caption_image" class="text-lg font-medium">Sumber</label>
+                                    <input value="{{ old('caption_image') }}" name="caption_image" placeholder="Sumber"
+                                        type="text" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
                                     @error('caption_image')
                                         <p class="text-red-400 font-medium">{{ $message }}</p>
                                     @enderror
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="col-span-2">
                                     <label for="file" class="text-lg font-medium">Tambah Gambar</label>
-                                    <input type="file" name="file[]" multiple
+                                    <input type="file" name="file[]"
                                         class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
                                     @error('file')
                                         <p class="text-red-400 font-medium">{{ $message }}</p>

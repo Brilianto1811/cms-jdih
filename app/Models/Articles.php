@@ -31,7 +31,7 @@ class Articles extends Model implements HasMedia
         'text',
         'author',
         // 'file',
-        'summary',
+        // 'summary',
         'caption',
         'caption_image',
         'tgl_publish',

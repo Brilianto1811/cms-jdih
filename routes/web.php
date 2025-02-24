@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\InfografisController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MonografiHukumController;
 use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\PermissionController;
@@ -17,11 +18,11 @@ use App\Http\Controllers\StrukturOrganisasiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisiMisiController;
 use App\Http\Controllers\YurisprudensiController;
+use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingController::class, 'index'])->name('landing.index');
+Route::get('/tentang/{slug}', [LandingController::class, 'tentang'])->name('landing.tentang');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -89,7 +89,6 @@ class ArticleController extends Controller implements HasMiddleware
             'text' => 'required',
             'author' => 'required|min:3',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'summary' => 'required',
             'caption' => 'required',
             'caption_image' => 'required',
             'tags' => 'required|json',
@@ -106,7 +105,6 @@ class ArticleController extends Controller implements HasMiddleware
             'author.min' => 'Penulis Konten minimal 3 karakter.',
             'file.*.mimes' => 'File harus berupa gambar (jpg, jpeg, png).',
             'file.*.max' => 'Ukuran file maksimal 2MB.',
-            'summary.required' => 'Ringakasan Konten harus diisi.',
             'caption.required' => 'Caption Konten harus diisi.',
             'caption_image.required' => 'Caption Image Konten harus diisi.',
             'tgl_publish.required' => 'Tanggal Publish Harus Diisi.',
@@ -123,7 +121,6 @@ class ArticleController extends Controller implements HasMiddleware
             $article->slug = Str::slug($request->title);
             $article->text = $request->text;
             $article->author = $request->author;
-            $article->summary = $request->summary;
             $article->caption = $request->caption;
             $article->caption_image = $request->caption_image;
             $article->tags = json_encode($request->tags);
@@ -175,7 +172,6 @@ class ArticleController extends Controller implements HasMiddleware
             'text' => 'required',
             'author' => 'required|min:3',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'summary' => 'required',
             'caption' => 'required',
             'caption_image' => 'required',
             'tags' => 'required|json',
@@ -192,7 +188,6 @@ class ArticleController extends Controller implements HasMiddleware
             $article->slug = Str::slug($request->title);
             $article->text = $request->text;
             $article->author = $request->author;
-            $article->summary = $request->summary;
             $article->caption = $request->caption;
             $article->caption_image = $request->caption_image;
             $article->tags = json_encode($request->tags); // Simpan sebagai JSON
