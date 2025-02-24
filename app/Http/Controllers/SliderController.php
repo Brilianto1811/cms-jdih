@@ -52,7 +52,6 @@ class SliderController extends Controller implements HasMiddleware
         $validator = Validator::make($request->all(), [
             'judul' => 'nullable',
             'sub_judul' => 'nullable',
-            // 'judul_tombol' => 'nullable',
             'tombol_url' => 'nullable',
             'penempatan' => 'nullable',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
@@ -63,7 +62,6 @@ class SliderController extends Controller implements HasMiddleware
             $slider = new Slider();
             $slider->judul = $request->judul;
             $slider->sub_judul = $request->sub_judul;
-            // $slider->judul_tombol = $request->judul_tombol;
             $slider->tombol_url = $request->tombol_url;
             $slider->penempatan = $request->penempatan;
 
@@ -71,7 +69,7 @@ class SliderController extends Controller implements HasMiddleware
 
             if ($request->hasFile('file')) {
                 foreach ($request->file('file') as $file) {
-                    $slider->addMedia($file)->toMediaCollection('images');
+                    $slider->addMedia($file)->toMediaCollection('images', 'public');
                 }
             }
 
@@ -93,27 +91,26 @@ class SliderController extends Controller implements HasMiddleware
 
     public function update(Request $request, string $id)
     {
-        // Validasi input
         $validator = Validator::make($request->all(), [
             'judul' => 'nullable',
             'sub_judul' => 'nullable',
-            // 'judul_tombol' => 'nullable',
             'tombol_url' => 'nullable',
             'penempatan' => 'nullable',
-            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($validator->passes()) {
             $slider = Slider::findOrFail($id);
             $slider->judul = $request->judul;
             $slider->sub_judul = $request->sub_judul;
-            // $slider->judul_tombol = $request->judul_tombol;
             $slider->tombol_url = $request->tombol_url;
             $slider->penempatan = $request->penempatan;
 
             $slider->save();
 
             if ($request->hasFile('file')) {
+                $slider->clearMediaCollection('images');
+
                 foreach ($request->file('file') as $file) {
                     $slider->addMedia($file)->toMediaCollection('images');
                 }

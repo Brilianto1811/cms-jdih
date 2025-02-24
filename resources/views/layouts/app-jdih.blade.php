@@ -44,20 +44,17 @@
                             <span class="dropdown-icon">▼</span>
                         </a>
                         <ul>
-                            <li><a href="{{ route('landing.tentang', ['slug' => 'sambutan']) }}"
-                                    id="menu-sekapur">Sekapur Sirih</a></li>
-                            <li><a href="{{ route('landing.tentang', ['slug' => 'dasar-hukum']) }}"
-                                    id="menu-dasar">Dasar Hukum</a></li>
-                            <li><a href="{{ route('landing.tentang', ['slug' => 'visi-dan-misi']) }}"
-                                    id="menu-visi">Visi
-                                    dan Misi</a></li>
-                            <li><a href="#" id="menu-struktur">Struktur Organisasi</a></li>
-                            <li><a href="{{ route('landing.tentang', ['slug' => 'sejarah']) }}"
-                                    id="menu-sejarah">Sejarah</a></li>
-                            <li><a href="{{ route('landing.tentang', ['slug' => 'tugas-pokok-dan-fungsi']) }}"
-                                    id="menu-tugas-pokok">Tugas Pokok dan Fungsi</a></li>
-                            <li><a href="#" id="menu-kontak">Kontak</a></li>
-                            <li><a href="#" id="menu-sop">Standard Operating Procedure</a></li>
+                            @php
+                                $khususArticles = App\Models\Articles::where('kategori_konten', 'Khusus')->get();
+                            @endphp
+
+                            @foreach ($khususArticles as $article)
+                                <li>
+                                    <a href="{{ route('landing.tentang', $article->slug) }}">
+                                        {{ $article->title }}
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </li>
                     <li><a href="berita/index.html" class="hover:underline" id="menu-berita">BERITA</a></li>
@@ -200,21 +197,25 @@
     </header>
 
     <!-- Section Hero -->
-    <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
+    {{-- <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
         style="background-image: url('{{ asset('assets/petakab.jpg') }}');">
-    </div>
-    {{-- @php
+    </div> --}}
+    @php
         $backgroundImage =
-            isset($slider) && $slider->getFirstMediaUrl('images')
+            isset($slider) && $slider->hasMedia('images')
                 ? $slider->getFirstMediaUrl('images')
                 : asset('assets/petakab.jpg');
+
+        // dd($backgroundImage);
+
     @endphp
+    {{-- @php
+        $backgroundImage = asset('assets/petakab.jpg');
+    @endphp --}}
 
     <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
         style="background-image: url('{{ $backgroundImage }}');">
-    </div> --}}
-
-
+    </div>
 
 
     <!-- Section Informasi -->

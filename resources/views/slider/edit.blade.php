@@ -117,13 +117,21 @@
                             <div class="grid grid-cols-1 gap-6">
                                 <div>
                                     <label for="file" class="text-lg font-medium">Mengunggah Gambar</label>
-                                    <input type="file" name="file[]" value="{{ old('file', $slider->file) }}"
+                                    <input type="file" name="file[]"
                                         class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
                                     @error('file')
                                         <p class="text-red-400 font-medium">{{ $message }}</p>
                                     @enderror
-                                    <img id="imagePreview"
-                                        class="hidden w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                                    <div id="preview" class="mt-4">
+                                        @if ($slider->getMedia('images')->isNotEmpty())
+                                            @foreach ($slider->getMedia('images') as $image)
+                                                <img src="{{ $image->getFullUrl() }}"
+                                                    class="preview-image w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                                            @endforeach
+                                        @else
+                                            <p class="text-gray-500">Belum ada gambar yang diunggah.</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -136,23 +144,29 @@
         </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const imageInput = document.getElementById('imageInput');
-            const imagePreview = document.getElementById('imagePreview');
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('imageInput');
+            const previewContainer = document.getElementById('preview');
 
-            if (imageInput) {
-                imageInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
+            fileInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+                previewContainer.innerHTML = ''; // Hapus preview lama saat memilih gambar baru
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            imagePreview.src = e.target.result;
-                            imagePreview.classList.remove('hidden');
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.classList.add('w-40', 'h-40', 'object-cover', 'rounded-md', 'shadow-md',
+                                'mt-3');
+                            previewContainer.appendChild(img);
                         };
                         reader.readAsDataURL(file);
                     }
-                });
-            }
+                }
+            });
         });
     </script>
 </x-app-layout>

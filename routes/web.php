@@ -59,7 +59,8 @@ Route::middleware('auth')->group(function () {
 
     // BERANDA
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.list');
-    Route::get('/articles/{slug}', [ArticleController::class, 'showKhusus'])->name('articles.show-khusus');
+    Route::get('/khusus', [ArticleController::class, 'indexKhusus'])->name('articles.index-khusus');
+    Route::get('/khusus/{slug}', [ArticleController::class, 'showKhusus'])->name('articles.show-khusus');
     Route::get('/berita/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');

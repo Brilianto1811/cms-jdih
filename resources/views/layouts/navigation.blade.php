@@ -69,38 +69,6 @@
                     </div>
                 @endcan
 
-                {{-- @can('view articles')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('articles.list')" :active="request()->routeIs('articles.list')">
-                            {{ __('Berita') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-
-                @can('view agenda')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('agenda.list')" :active="request()->routeIs('agenda.list')">
-                            {{ __('Agenda') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-
-                @can('view slider')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('slider.list')" :active="request()->routeIs('slider.list')">
-                            {{ __('Slider') }}
-                        </x-nav-link>
-                    </div>
-                @endcan
-
-                @can('view infografis')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('infografis.list')" :active="request()->routeIs('infografis.list')">
-                            {{ __('Infografis') }}
-                        </x-nav-link>
-                    </div>
-                @endcan --}}
-
                 @can('view dokumen')
                     <!-- Dropdown Dokumen -->
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -178,6 +146,51 @@
                                         {{ __('Video') }}
                                     </x-dropdown-link>
                                 @endcan
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                @endcan
+
+                @can('view tentang')
+                    <!-- Dropdown tentang -->
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    <div>{{ __('Tentang') }}</div>
+
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                {{-- @can('view foto')
+                                    <x-dropdown-link :href="route('foto.list')">
+                                        {{ __('Foto') }}
+                                    </x-dropdown-link>
+                                @endcan
+                                @can('view video')
+                                    <x-dropdown-link :href="route('video.list')">
+                                        {{ __('Video') }}
+                                    </x-dropdown-link>
+                                @endcan --}}
+                                @php
+                                    $khususArticles = App\Models\Articles::where('kategori_konten', 'Khusus')->get();
+                                @endphp
+
+                                @foreach ($khususArticles as $article)
+                                    <x-dropdown-link :href="route('articles.show-khusus', $article->slug)">
+                                        {{ $article->title }}
+                                    </x-dropdown-link>
+                                @endforeach
                             </x-slot>
                         </x-dropdown>
                     </div>

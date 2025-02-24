@@ -17,23 +17,11 @@ class LandingController extends Controller
         return view('welcome', compact('slider'));
     }
 
+
     public function tentang($slug)
     {
-        $article = Articles::where('slug', $slug)->latest()->first();
+        $article = Articles::where('slug', $slug)->firstOrFail();
 
-        if (!$article) {
-            return abort(404, 'Data tidak ditemukan');
-        }
-
-        $view = match ($slug) {
-            'sambutan' => 'landing.tentang.sambutan',
-            'visi-dan-misi' => 'landing.tentang.visi-misi',
-            'sejarah' => 'landing.tentang.sejarah',
-            'tugas-pokok-dan-fungsi' => 'landing.tentang.tugas-pokok-fungsi',
-            'dasar-hukum' => 'landing.tentang.dasar-hukum',
-            default => abort(404, 'Halaman tidak ditemukan')
-        };
-
-        return view($view, compact('article'));
+        return view('landing.tentang.tentang', compact('article'));
     }
 }

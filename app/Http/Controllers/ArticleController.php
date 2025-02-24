@@ -67,6 +67,12 @@ class ArticleController extends Controller implements HasMiddleware
         return view('articles.list');
     }
 
+    public function indexKhusus()
+    {
+        $article = Articles::where('kategori_konten', 'khusus')->select('title', 'super_artikel')->get();
+        return view('articles.index-khusus', compact('article'));
+    }
+
     public function showKhusus($slug)
     {
         $article = Articles::where('slug', $slug)->firstOrFail();
@@ -195,7 +201,7 @@ class ArticleController extends Controller implements HasMiddleware
             $article->status_publish = $request->status_publish;
             $article->kategori_konten = $request->kategori_konten;
             $article->spesial_kategori = $request->spesial_kategori;
-            $article->super_artikel = $request->super_artikel;
+            $article->super_artikel = $request->kategori_konten === "khusus" ? $request->text : null;
 
             if ($request->has('tags')) {
                 $tags = json_decode($request->tags, true); // Decode JSON dari Tagify

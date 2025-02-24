@@ -1,6 +1,6 @@
 @extends('layouts.app-jdih')
 
-@section('title', 'Halaman Visi Misi')
+@section('title', 'Halaman Tentang')
 
 @section('content')
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight text-center">
@@ -12,7 +12,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="prose dark:prose-invert text-center">
                     <div class="text-left">
-                        {!! $article->text !!}
+                        {!! $article->super_artikel !!}
                     </div>
                 </div>
             </div>

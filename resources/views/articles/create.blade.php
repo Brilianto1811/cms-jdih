@@ -248,41 +248,103 @@
             $('#preview').html(initialContent);
         });
 
+        // function toggleReadonly() {
+        //     let kategori = document.getElementById("kategori_konten").value;
+        //     let spesialKategori = document.getElementById("spesial_kategori");
+        //     let statusArticles = document.getElementById("status_publish");
+        //     let summary = document.getElementById("summary");
+        //     let caption = document.getElementById("caption");
+        //     let hiddenSpesialKategori = document.getElementById("spesial_kategori_hidden");
+        //     let hiddenStatusArticles = document.getElementById("status_publish_hidden");
+
+        //     if (kategori === "khusus") {
+        //         spesialKategori.value = "spesial";
+        //         statusArticles.value = "spesial";
+        //         summary.value = "Konten ini termasuk kategori khusus.";
+        //         caption.value = "Konten ini termasuk kategori khusus.";
+
+        //         spesialKategori.setAttribute("disabled", "true");
+        //         statusArticles.setAttribute("disabled", "true");
+        //         summary.setAttribute("readonly", "true");
+        //         caption.setAttribute("readonly", "true");
+
+        //         hiddenSpesialKategori.value = "spesial";
+        //         hiddenStatusArticles.value = "spesial";
+        //     } else {
+        //         spesialKategori.removeAttribute("disabled");
+        //         statusArticles.removeAttribute("disabled");
+        //         summary.removeAttribute("readonly");
+        //         caption.removeAttribute("readonly");
+
+        //         spesialKategori.value = "";
+        //         statusArticles.value = "";
+        //         summary.value = "";
+        //         caption.value = "";
+
+        //         hiddenSpesialKategori.value = "";
+        //         hiddenStatusArticles.value = "";
+        //     }
+        // }
+
+        // document.getElementById("spesial_kategori").addEventListener("change", function() {
+        //     document.getElementById("spesial_kategori_hidden").value = this.value;
+        // });
+
+        // document.getElementById("status_publish").addEventListener("change", function() {
+        //     document.getElementById("status_publish_hidden").value = this.value;
+        // });
+
+        // window.onload = function() {
+        //     toggleReadonly();
+        // };
+        document.addEventListener("DOMContentLoaded", function() {
+            let editor = document.getElementById("editor");
+            let hiddenInput = document.getElementById("editor-content");
+
+            // Simpan isi editor ke input hidden sebelum form dikirim
+            document.querySelector("form").addEventListener("submit", function() {
+                hiddenInput.value = editor.innerHTML;
+            });
+        });
+
         function toggleReadonly() {
             let kategori = document.getElementById("kategori_konten").value;
             let spesialKategori = document.getElementById("spesial_kategori");
             let statusArticles = document.getElementById("status_publish");
-            let summary = document.getElementById("summary");
             let caption = document.getElementById("caption");
             let hiddenSpesialKategori = document.getElementById("spesial_kategori_hidden");
             let hiddenStatusArticles = document.getElementById("status_publish_hidden");
 
             if (kategori === "khusus") {
+                // Set value otomatis dan readonly
                 spesialKategori.value = "spesial";
                 statusArticles.value = "spesial";
-                summary.value = "Konten ini termasuk kategori khusus.";
                 caption.value = "Konten ini termasuk kategori khusus.";
 
+                // Jadikan readonly
                 spesialKategori.setAttribute("disabled", "true");
                 statusArticles.setAttribute("disabled", "true");
-                summary.setAttribute("readonly", "true");
                 caption.setAttribute("readonly", "true");
 
+                // Set value hidden agar tetap dikirim ke backend
                 hiddenSpesialKategori.value = "spesial";
                 hiddenStatusArticles.value = "spesial";
             } else {
+                // Aktifkan kembali jika bukan "khusus"
                 spesialKategori.removeAttribute("disabled");
                 statusArticles.removeAttribute("disabled");
                 summary.removeAttribute("readonly");
                 caption.removeAttribute("readonly");
 
+                // Reset nilai dropdown dan hidden fields jika kategori bukan "khusus"
                 spesialKategori.value = "";
                 statusArticles.value = "";
-                summary.value = "";
-                caption.value = "";
-
                 hiddenSpesialKategori.value = "";
                 hiddenStatusArticles.value = "";
+
+                // Reset nilai input fields
+                summary.value = "";
+                caption.value = "";
             }
         }
 
