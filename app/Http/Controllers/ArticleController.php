@@ -24,13 +24,6 @@ class ArticleController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     $articles = Articles::orderBy('id', 'DESC')->paginate(5);
-    //     return view('articles.list', [
-    //         'articles' => $articles,
-    //     ]);
-    // }
 
     public function index(Request $request)
     {
@@ -48,14 +41,19 @@ class ArticleController extends Controller implements HasMiddleware
                 })
                 ->addColumn('status_publish', function ($item) {
                     $statusClasses = [
-                        'Publish' => 'bg-green-500 text-white',
-                        'Draft' => 'bg-gray-500 text-white',
-                        'Reject' => 'bg-red-500 text-white',
-                        'Perlu Validasi' => 'bg-orange-500 text-white',
-                        'spesial' => 'bg-blue-500 text-white',
+                        'publish' => ['bg' => '#2df00a', 'text' => '#FFFFFF'],
+                        'draft' => ['bg' => '#ababab', 'text' => '#FFFFFF'],
+                        'reject' => ['bg' => '#e9200f', 'text' => '#FFFFFF'],
+                        'validasi' => ['bg' => '#f3f020', 'text' => '#FFFFFF'],
+                        'spesial' => ['bg' => '#5750e6', 'text' => '#FFFFFF'],
                     ];
-                    $statusClass = $statusClasses[$item->status_publish] ?? 'bg-gray-500 text-white';
-                    return '<span class="px-3 py-1 rounded-md text-sm font-medium ' . $statusClass . '">' . $item->status_publish . '</span>';
+
+                    $statusClass = $statusClasses[$item->status_publish] ?? ['bg' => '#edb617', 'text' => '#FFFFFF'];
+
+                    return '<span class="px-3 py-1 rounded-md text-sm font-medium"
+                                style="background-color: ' . $statusClass['bg'] . '; color: ' . $statusClass['text'] . ';">
+                                ' . ucfirst($item->status_publish) . '
+                            </span>';
                 })
                 ->addColumn('text', function ($item) {
                     return Str::limit(strip_tags($item->text), 150, '...');
@@ -95,8 +93,8 @@ class ArticleController extends Controller implements HasMiddleware
             'text' => 'required',
             'author' => 'required|min:3',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'caption' => 'required',
-            'caption_image' => 'required',
+            'caption' => 'nullable',
+            'caption_image' => 'nullable',
             'tags' => 'required|json',
             'tgl_publish' => 'required',
             'status_publish' => 'required',
@@ -111,8 +109,6 @@ class ArticleController extends Controller implements HasMiddleware
             'author.min' => 'Penulis Konten minimal 3 karakter.',
             'file.*.mimes' => 'File harus berupa gambar (jpg, jpeg, png).',
             'file.*.max' => 'Ukuran file maksimal 2MB.',
-            'caption.required' => 'Caption Konten harus diisi.',
-            'caption_image.required' => 'Caption Image Konten harus diisi.',
             'tgl_publish.required' => 'Tanggal Publish Harus Diisi.',
             'status_publish.required' => 'Pilih Status Publish Konten.',
             'kategori_konten.required' => 'Pilih Kategori Publish Konten.',
@@ -178,8 +174,8 @@ class ArticleController extends Controller implements HasMiddleware
             'text' => 'required',
             'author' => 'required|min:3',
             'file.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'caption' => 'required',
-            'caption_image' => 'required',
+            'caption' => 'nullable',
+            'caption_image' => 'nullable',
             'tags' => 'required|json',
             'tgl_publish' => 'required',
             'status_publish' => 'required',
@@ -212,6 +208,8 @@ class ArticleController extends Controller implements HasMiddleware
             $article->save();
 
             if ($request->hasFile('file')) {
+                $article->clearMediaCollection('images');
+
                 foreach ($request->file('file') as $file) {
                     $article->addMedia($file)->toMediaCollection('images');
                 }

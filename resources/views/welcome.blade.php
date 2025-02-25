@@ -3,6 +3,32 @@
 @section('title', 'Halaman Index')
 
 @section('content')
+    @php
+        $backgroundImage =
+            isset($slider) && $slider->hasMedia('images')
+                ? $slider->getFirstMediaUrl('images')
+                : asset('assets/petakab.jpg');
+    @endphp
+
+    <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
+        style="background-image: url('{{ $backgroundImage }}');">
+    </div>
+
+    <!-- Section Informasi -->
+    <section class="py-10 px-6 info-section">
+        <div class="container mx-auto text-center">
+            <h2 class="info-title">
+                <span>Jaringan Dokumentasi dan Informasi Hukum</span>
+                <span>Dewan Perwakilan Rakyat Daerah Kabupaten Bogor</span>
+            </h2>
+            <p class="mt-4 text-gray-600 text-lg">Pencarian Produk Hukum</p>
+            <form class="mt-8 flex justify-center items-center search-form">
+                <input type="text" placeholder="Cari produk hukum..." />
+                <button type="submit">CARI</button>
+            </form>
+        </div>
+    </section>
+
     <!-- Section Ikon -->
     <section class="py-10 icon-section">
         <div class="container mx-auto px-6 max-w-5xl">
@@ -173,55 +199,26 @@
                     <div id="slider" class="overflow-hidden rounded-lg shadow-lg relative">
                         <!-- Slide items -->
                         <div class="slider-items flex transition-transform duration-300">
-                            <div class="relative w-full flex-shrink-0">
-                                <img src="assets/berita1.jpeg" alt="Slide 1" class="w-full">
-                                <div
-                                    class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
-                                    KUNJUNGAN STUDI TIRU
+                            @foreach ($articlesSlider as $article)
+                                <div class="relative w-full flex-shrink-0">
+                                    <a href="{{ route('landing.detail-berita', $article->slug) }}" class="block">
+                                        <img src="{{ $article->foto }}" alt="{{ $article->title }}" class="w-full">
+                                        <div
+                                            class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
+                                            {{ $article->title }}
+                                        </div>
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="relative w-full flex-shrink-0">
-                                <img src="assets/berita2.jpeg" alt="Slide 2" class="w-full">
-                                <div
-                                    class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
-                                    Rapat Koordinasi Program Pembentukan Peraturan Daerah dan Peraturan Bupati Tahun
-                                    2025
-                                </div>
-                            </div>
-                            <div class="relative w-full flex-shrink-0">
-                                <img src="assets/berita3.jpeg" alt="Slide 3" class="w-full">
-                                <div
-                                    class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
-                                    JDIH Kabupaten Bogor Koordinasi ke Balai Réhabilitasi Sosial Waturnas "Mulya Jaya"
-                                    Jakarta
-                                </div>
-                            </div>
-                            <div class="relative w-full flex-shrink-0">
-                                <img src="assets/berita4.jpeg" alt="Slide 4" class="w-full">
-                                <div
-                                    class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
-                                    JDIH Kabupaten Bogor Konsultasi Ke Pusat Jaringan Dokumentasi dan Informasi Hukum
-                                    Nasional
-                                </div>
-                            </div>
-                            <div class="relative w-full flex-shrink-0">
-                                <img src="assets/berita5.jpeg" alt="Slide 5" class="w-full">
-                                <div
-                                    class="absolute bottom-8 left-0 right-0 text-center text-white text-xl bg-black bg-opacity-50 py-2">
-                                    Koordinasi ke Balai Penerbitan Braille Indonesia (BPBI) Sentra Wiyata Guna Ditjen.
-                                    Rehsos Kementerian Sosial RI Bandung
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
                     <!-- Slider indicators -->
                     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-                        <span class="h-2 w-2 bg-white rounded-full cursor-pointer" data-slide="0"></span>
-                        <span class="h-2 w-2 bg-gray-300 rounded-full cursor-pointer" data-slide="1"></span>
-                        <span class="h-2 w-2 bg-gray-300 rounded-full cursor-pointer" data-slide="2"></span>
-                        <span class="h-2 w-2 bg-gray-300 rounded-full cursor-pointer" data-slide="3"></span>
-                        <span class="h-2 w-2 bg-gray-300 rounded-full cursor-pointer" data-slide="4"></span>
+                        @foreach ($articlesSlider as $index => $article)
+                            <span class="h-2 w-2 bg-gray-300 rounded-full cursor-pointer"
+                                data-slide="{{ $index }}"></span>
+                        @endforeach
                     </div>
 
                     <!-- Navigation buttons -->
@@ -234,6 +231,7 @@
                         &#9654;
                     </button>
                 </div>
+
 
                 <!-- Berita & Agenda -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
@@ -271,30 +269,15 @@
                     <div>
                         <h2 class="text-sm md:text-2xl font-bold mb-4">TERKINI</h2>
                         <div class="space-y-4">
-                            <div class="terkini flex gap-4">
-                                <img src="assets/berita5.jpeg" alt="Terkini 1" class="h-20 w-28 rounded-md">
-                                <p class="hover:text-blue-700 line-clamp-3">Koordinasi ke Balai Penerbitan Braille
-                                    Indonesia (BPBI)
-                                    Sentra Wiyata Guna Ditjen. Rehsos Kementerian Sosial RI Bandung</p>
-                            </div>
-                            <div class="terkini flex gap-4">
-                                <img src="assets/berita4.jpeg" alt="Terkini 2" class="h-20 w-28 rounded-md">
-                                <p class="hover:text-blue-700 line-clamp-3">JDIH Kabupaten Bogor Konsultasi Ke Pusat
-                                    Jaringan
-                                    Dokumentasi dan Informasi Hukum Nasional</p>
-                            </div>
-                            <div class="terkini flex gap-4">
-                                <img src="assets/berita6.jpeg" alt="Terkini 3" class="h-20 w-28 rounded-md">
-                                <p class="hover:text-blue-700 line-clamp-3">Sosialisasi Peraturan Daerah Kabupaten Bogor
-                                    Nomor 3 Tahun 2023 tentang Penyelenggaraan Kabupaten Layak Anak dan Peraturan Daerah
-                                    Kabupaten Bogor Nomor 4 Tahun 2023 tentang Pendidikan Anak Usia Dini</p>
-                            </div>
-                            <div class="terkini flex gap-4">
-                                <img src="assets/berita3.jpeg" alt="Terkini 4" class="h-20 w-28 rounded-md">
-                                <p class="hover:text-blue-700 line-clamp-3">JDIH Kabupaten Bogor Koordinasi ke Balai
-                                    Réhabilitasi
-                                    Sosial Waturnas "Mulya Jaya" Jakarta</p>
-                            </div>
+                            @foreach ($articlesTerkini as $news)
+                                <a href="{{ route('landing.detail-berita', $news->slug) }}" class="terkini flex gap-4">
+                                    <img src="{{ $news->foto }}" alt="{{ $news->title }}"
+                                        class="h-20 w-28 rounded-md object-cover">
+                                    <p class="hover:text-blue-700 line-clamp-3">
+                                        {{ $news->title }}
+                                    </p>
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                 </div>

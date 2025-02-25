@@ -325,10 +325,10 @@ nav ul li:nth-child(4):hover ul {
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.section-berita1 div.grid>div:hover {
+/* .section-berita1 div.grid>div:hover {
     transform: scale(1.02);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .section-tahun ul li {
     font-size: 1rem;

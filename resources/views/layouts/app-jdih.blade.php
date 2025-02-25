@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'JDIH Kabupaten Bogor') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -57,7 +57,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    <li><a href="berita/index.html" class="hover:underline" id="menu-berita">BERITA</a></li>
+                    <li><a href="{{ route('landing.berita') }}" class="hover:underline" id="menu-berita">BERITA</a></li>
                     <li><a href="#" class="hover:underline" id="menu-infografis">INFOGRAFIS</a></li>
                     <li>
                         <a href="#" class="hover:underline" id="menu-galeri">GALERI
@@ -196,43 +196,6 @@
         </div>
     </header>
 
-    <!-- Section Hero -->
-    {{-- <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
-        style="background-image: url('{{ asset('assets/petakab.jpg') }}');">
-    </div> --}}
-    @php
-        $backgroundImage =
-            isset($slider) && $slider->hasMedia('images')
-                ? $slider->getFirstMediaUrl('images')
-                : asset('assets/petakab.jpg');
-
-        // dd($backgroundImage);
-
-    @endphp
-    {{-- @php
-        $backgroundImage = asset('assets/petakab.jpg');
-    @endphp --}}
-
-    <div class="hero-section min-h-screen md:h-screen bg-center md:bg-cover bg-no-repeat flex items-center"
-        style="background-image: url('{{ $backgroundImage }}');">
-    </div>
-
-
-    <!-- Section Informasi -->
-    <section class="py-10 px-6 info-section">
-        <div class="container mx-auto text-center">
-            <h2 class="info-title">
-                <span>Jaringan Dokumentasi dan Informasi Hukum</span>
-                <span>Dewan Perwakilan Rakyat Daerah Kabupaten Bogor</span>
-            </h2>
-            <p class="mt-4 text-gray-600 text-lg">Pencarian Produk Hukum</p>
-            <form class="mt-8 flex justify-center items-center search-form">
-                <input type="text" placeholder="Cari produk hukum..." />
-                <button type="submit">CARI</button>
-            </form>
-        </div>
-    </section>
-
     {{-- Content --}}
     <main>
         @yield('content')
@@ -243,34 +206,34 @@
             <h2 class="text-center text-2xl font-semibold text-gray-800 mb-6">Situs Terkait</h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
                 <!-- JDIHN -->
-                <div class="site-card">
+                <a href="https://jdihn.go.id/" target="_blank" class="site-card block text-center">
                     <img src="{{ asset('assets/jdihn.png') }}" alt="JDIHN" class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIHN</p>
-                </div>
+                </a>
                 <!-- JDIH Jawa Barat -->
-                <div class="site-card">
+                <a href="https://jdih.jabarprov.go.id/" target="_blank" class="site-card block text-center">
                     <img src="{{ asset('assets/jawa-barat.png') }}" alt="JDIH Jawa Barat"
                         class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH Jawa Barat</p>
-                </div>
+                </a>
                 <!-- JDIH DPRD Jawa Barat -->
-                <div class="site-card">
+                <a href="https://jdihdprd.jabarprov.go.id/" target="_blank" class="site-card block text-center">
                     <img src="{{ asset('assets/dprd-jawa-barat.png') }}" alt="JDIH DPRD Jawa Barat"
                         class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH DPRD Jawa Barat</p>
-                </div>
+                </a>
                 <!-- JDIH Kabupaten Bogor -->
-                <div class="site-card">
+                <a href="https://jdih.bogorkab.go.id/" target="_blank" class="site-card block text-center">
                     <img src="{{ asset('assets/Lambang_Kabupaten_Bogor.png') }}" alt="JDIH Kabupaten Bogor"
                         class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">JDIH Kabupaten Bogor</p>
-                </div>
+                </a>
                 <!-- DPRD Kabupaten Bogor -->
-                <div class="site-card">
+                <a href="https://setwan.bogorkab.go.id/" target="_blank" class="site-card block text-center">
                     <img src="{{ asset('assets/Logo_DPRD.webp') }}" alt="DPRD Kabupaten Bogor"
                         class="mx-auto h-16 mb-4" />
                     <p class="text-gray-700 font-semibold hover:text-blue-700">DPRD Kabupaten Bogor</p>
-                </div>
+                </a>
             </div>
         </div>
     </section>

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
 
 class PeraturanController extends Controller implements HasMiddleware
 {
@@ -25,6 +27,27 @@ class PeraturanController extends Controller implements HasMiddleware
         $peraturan = Peraturan::orderBy('tipe_dokumen', 'ASC')->paginate(5);
         return view('dokumen.peraturan.list', compact('peraturan'));
     }
+
+    // public function index(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Peraturan::latest()->select('id', 'no_peraturan', 'tahun', 'judul', 'subjek', 'tgl_penetapan', 'created_at');
+
+    //         return DataTables::of($data)
+    //             ->addIndexColumn()
+    //             ->addColumn('action', function ($item) {
+    //                 return view('peraturan.action', compact('item'))->render();
+    //             })
+    //             ->addColumn('tgl_penetapan', function ($row) {
+    //                 return \Carbon\Carbon::parse($row->tgl_penetapan)
+    //                     ->locale('id')->isoFormat('dddd, D MMMM YYYY');
+    //             })
+    //             ->rawColumns(['action', 'status_publish'])
+    //             ->make(true);
+    //     }
+
+    //     return view('dokumen.peraturan.list');
+    // }
 
     public function create()
     {

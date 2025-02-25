@@ -16,10 +16,8 @@
                 <div class="mb-4">
                     <label for="status_peraturan" class="text-lg font-medium">Jenis Peraturan</label>
                     <select class="border-gray-300 shadow-sm w-full rounded-lg p-2">
+                        <option>Pilih Jenis Peraturan</option>
                         <option>Peraturan Daerah</option>
-                        <option>Tidak Berlaku</option>
-                        <option>Belum Berlaku</option>
-                        <option>Tetap</option>
                     </select>
                     @error('status_peraturan')
                         <p class="text-red-400 font-medium">{{ $message }}</p>

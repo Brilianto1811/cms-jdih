@@ -27,7 +27,7 @@
 
                 <form action="{{ route('articles.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
+                    <div class="bg-white border-2 border-solid border-gray-300 p-6 rounded-lg mb-4">
                         <h3 class="text-lg font-semibold mb-4 text-center">Kategori Topik dan Status</h3>
                         <div class="mb-2">
                             <label for="kategori_konten" class="text-lg font-medium">Kategori Konten</label>
@@ -146,7 +146,7 @@
                         <div class="bg-white border p-6 rounded-lg shadow-lg mb-4">
                             <h3 class="text-lg font-semibold mb-4 text-center">Tanggal Publish dan Tambah Gambar</h3>
 
-                            <div class="grid grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 gap-6">
                                 <div>
                                     <label for="tags" class="text-lg font-medium">Tags/Kata Kunci</label>
                                     <input id="tags" name="tags" placeholder="Tags" type="text"
@@ -165,7 +165,7 @@
                                         <p class="text-red-400 font-medium">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="col-span-2">
+                                <div>
                                     <label for="file" class="text-lg font-medium">Tambah Gambar</label>
                                     <input type="file" name="file[]"
                                         class="border-gray-300 shadow-sm w-full rounded-lg p-2" id="imageInput">
@@ -248,55 +248,6 @@
             $('#preview').html(initialContent);
         });
 
-        // function toggleReadonly() {
-        //     let kategori = document.getElementById("kategori_konten").value;
-        //     let spesialKategori = document.getElementById("spesial_kategori");
-        //     let statusArticles = document.getElementById("status_publish");
-        //     let summary = document.getElementById("summary");
-        //     let caption = document.getElementById("caption");
-        //     let hiddenSpesialKategori = document.getElementById("spesial_kategori_hidden");
-        //     let hiddenStatusArticles = document.getElementById("status_publish_hidden");
-
-        //     if (kategori === "khusus") {
-        //         spesialKategori.value = "spesial";
-        //         statusArticles.value = "spesial";
-        //         summary.value = "Konten ini termasuk kategori khusus.";
-        //         caption.value = "Konten ini termasuk kategori khusus.";
-
-        //         spesialKategori.setAttribute("disabled", "true");
-        //         statusArticles.setAttribute("disabled", "true");
-        //         summary.setAttribute("readonly", "true");
-        //         caption.setAttribute("readonly", "true");
-
-        //         hiddenSpesialKategori.value = "spesial";
-        //         hiddenStatusArticles.value = "spesial";
-        //     } else {
-        //         spesialKategori.removeAttribute("disabled");
-        //         statusArticles.removeAttribute("disabled");
-        //         summary.removeAttribute("readonly");
-        //         caption.removeAttribute("readonly");
-
-        //         spesialKategori.value = "";
-        //         statusArticles.value = "";
-        //         summary.value = "";
-        //         caption.value = "";
-
-        //         hiddenSpesialKategori.value = "";
-        //         hiddenStatusArticles.value = "";
-        //     }
-        // }
-
-        // document.getElementById("spesial_kategori").addEventListener("change", function() {
-        //     document.getElementById("spesial_kategori_hidden").value = this.value;
-        // });
-
-        // document.getElementById("status_publish").addEventListener("change", function() {
-        //     document.getElementById("status_publish_hidden").value = this.value;
-        // });
-
-        // window.onload = function() {
-        //     toggleReadonly();
-        // };
         document.addEventListener("DOMContentLoaded", function() {
             let editor = document.getElementById("editor");
             let hiddenInput = document.getElementById("editor-content");
@@ -333,7 +284,6 @@
                 // Aktifkan kembali jika bukan "khusus"
                 spesialKategori.removeAttribute("disabled");
                 statusArticles.removeAttribute("disabled");
-                summary.removeAttribute("readonly");
                 caption.removeAttribute("readonly");
 
                 // Reset nilai dropdown dan hidden fields jika kategori bukan "khusus"
@@ -343,7 +293,6 @@
                 hiddenStatusArticles.value = "";
 
                 // Reset nilai input fields
-                summary.value = "";
                 caption.value = "";
             }
         }

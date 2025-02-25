@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing.index');
 Route::get('/tentang/{slug}', [LandingController::class, 'tentang'])->name('landing.tentang');
+Route::get('/list-berita', [LandingController::class, 'berita'])->name('landing.berita');
+Route::get('/berita/{slug}', [LandingController::class, 'beritaDetail'])->name('landing.detail-berita');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -61,8 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.list');
     Route::get('/khusus', [ArticleController::class, 'indexKhusus'])->name('articles.index-khusus');
     Route::get('/khusus/{slug}', [ArticleController::class, 'showKhusus'])->name('articles.show-khusus');
-    Route::get('/berita/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
     Route::post('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
     Route::delete('/articles', [ArticleController::class, 'destroy'])->name('articles.destroy');

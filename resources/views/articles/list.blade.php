@@ -61,7 +61,7 @@
                                 if (response.status) {
                                     Swal.fire({
                                         title: "Terhapus!",
-                                        text: "Artikel berhasil dihapus.",
+                                        text: "Berita berhasil dihapus.",
                                         icon: "success",
                                         timer: 1000,
                                         showConfirmButton: false

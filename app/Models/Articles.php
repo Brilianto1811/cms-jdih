@@ -51,4 +51,9 @@ class Articles extends Model implements HasMedia
             $article->slug = Str::slug($article->title);
         });
     }
+
+    public function getFotoAttribute()
+    {
+        return $this->getFirstMediaUrl('images', 'thumb') ?: asset('assets/default.jpg');
+    }
 }

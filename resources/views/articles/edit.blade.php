@@ -1,4 +1,7 @@
 <x-app-layout>
+    {{-- @php
+        dd($articles->status_publish);
+    @endphp --}}
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -52,9 +55,7 @@
                             <div>
                                 <label for="spesial_kategori" class="text-lg font-medium">Topik</label>
                                 <select id="spesial_kategori" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                    <option value=""
-                                        {{ old('spesial_kategori', $articles->spesial_kategori) == '' ? 'selected' : '' }}>
-                                        Pilih
+                                    <option value="" {{ old('spesial_kategori') == '' ? 'selected' : '' }}>Pilih
                                         Topik</option>
                                     <option value="terkini"
                                         {{ old('spesial_kategori', $articles->spesial_kategori) == 'terkini' ? 'selected' : '' }}>
@@ -73,27 +74,21 @@
                             <div>
                                 <label for="status_publish" class="text-lg font-medium">Status Publish</label>
                                 <select id="status_publish" class="border-gray-300 shadow-sm w-full rounded-lg p-2">
-                                    <option value=""
-                                        {{ old('status_publish', $articles->status_publish) == '' ? 'selected' : '' }}>
-                                        Pilih
+                                    <option value="" {{ old('status_publish') == '' ? 'selected' : '' }}>Pilih
                                         Status Publish</option>
                                     <option value="perlu validasi"
                                         {{ old('status_publish', $articles->status_publish) == 'perlu validasi' ? 'selected' : '' }}>
-                                        Perlu Validasi
-                                    </option>
+                                        perlu validasi</option>
                                     <option value="publish"
                                         {{ old('status_publish', $articles->status_publish) == 'publish' ? 'selected' : '' }}>
-                                        Publish
-                                    </option>
+                                        Publish</option>
                                     <option value="draft"
                                         {{ old('status_publish', $articles->status_publish) == 'draft' ? 'selected' : '' }}>
-                                        Draft
-                                    </option>
+                                        Draft</option>
                                     <option value="reject"
                                         {{ old('status_publish', $articles->status_publish) == 'reject' ? 'selected' : '' }}>
-                                        Reject
-                                    </option>
-                                    <option value="spesial" hidden
+                                        Reject</option>
+                                    <option value="spesial"
                                         {{ old('status_publish', $articles->status_publish) == 'spesial' ? 'selected' : '' }}>
                                         Spesial</option>
                                 </select>
@@ -188,7 +183,16 @@
                                     @error('file')
                                         <p class="text-red-400 font-medium">{{ $message }}</p>
                                     @enderror
-                                    <div id="imagePreviewContainer" class="mt-3 flex gap-2 flex-wrap"></div>
+                                    <div id="preview" class="mt-4">
+                                        @if ($articles->getMedia('images')->isNotEmpty())
+                                            @foreach ($articles->getMedia('images') as $image)
+                                                <img src="{{ $image->getFullUrl() }}"
+                                                    class="preview-image w-40 h-40 object-cover rounded-md shadow-md mt-3">
+                                            @endforeach
+                                        @else
+                                            <p class="text-gray-500">Belum ada gambar yang diunggah.</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -212,23 +216,31 @@
                     enabled: 0
                 }
             });
+        });
 
-            const imageInput = document.getElementById('imageInput');
-            const imagePreview = document.getElementById('imagePreview');
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('imageInput');
+            const previewContainer = document.getElementById('preview');
 
-            if (imageInput) {
-                imageInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
+            fileInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+                previewContainer.innerHTML = ''; // Hapus preview lama saat memilih gambar baru
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            imagePreview.src = e.target.result;
-                            imagePreview.classList.remove('hidden');
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.classList.add('w-40', 'h-40', 'object-cover', 'rounded-md', 'shadow-md',
+                                'mt-3');
+                            previewContainer.appendChild(img);
                         };
                         reader.readAsDataURL(file);
                     }
-                });
-            }
+                }
+            });
         });
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -257,54 +269,85 @@
             $('#preview').html(initialContent);
         });
 
-        function toggleReadonly() {
-            let kategori = document.getElementById("kategori_konten").value;
+        document.addEventListener("DOMContentLoaded", function() {
+            handleKategoriEdit(); // Jalankan saat halaman dimuat
+
+            document.getElementById("kategori_konten")?.addEventListener("change", function() {
+                handleKategoriEdit();
+            });
+
+            document.getElementById("spesial_kategori")?.addEventListener("change", function() {
+                document.getElementById("spesial_kategori_hidden").value = this.value;
+            });
+
+            document.getElementById("status_publish")?.addEventListener("change", function() {
+                document.getElementById("status_publish_hidden").value = this.value;
+            });
+        });
+
+        function handleKategoriEdit() {
+            let kategori = document.getElementById("kategori_konten");
+            let isKhusus = kategori?.value === "khusus";
             let spesialKategori = document.getElementById("spesial_kategori");
             let statusArticles = document.getElementById("status_publish");
-            let summary = document.getElementById("summary");
             let caption = document.getElementById("caption");
             let hiddenSpesialKategori = document.getElementById("spesial_kategori_hidden");
             let hiddenStatusArticles = document.getElementById("status_publish_hidden");
 
-            if (kategori === "khusus") {
+            // Jika kategori "khusus", disable dropdown kategori dan set nilai lainnya
+            if (isKhusus) {
+                kategori.setAttribute("disabled", "true"); // Disable dropdown kategori
+                kategori.insertAdjacentHTML("afterend", `<input type="hidden" name="kategori_konten" value="khusus">`);
+
                 spesialKategori.value = "spesial";
                 statusArticles.value = "spesial";
-                summary.value = "Konten ini termasuk kategori khusus.";
                 caption.value = "Konten ini termasuk kategori khusus.";
 
                 spesialKategori.setAttribute("disabled", "true");
                 statusArticles.setAttribute("disabled", "true");
-                summary.setAttribute("readonly", "true");
                 caption.setAttribute("readonly", "true");
 
+                // Simpan nilai agar tetap dikirim ke backend
                 hiddenSpesialKategori.value = "spesial";
                 hiddenStatusArticles.value = "spesial";
             } else {
+                kategori.removeAttribute("disabled"); // Enable kembali dropdown kategori
+
                 spesialKategori.removeAttribute("disabled");
                 statusArticles.removeAttribute("disabled");
-                summary.removeAttribute("readonly");
                 caption.removeAttribute("readonly");
 
-                spesialKategori.value = "";
-                statusArticles.value = "";
-                summary.value = "";
-                caption.value = "";
+                // Isi value summary dan caption dengan data lama jika bukan kategori "khusus"
+                caption.value = caption.value || "{{ old('caption', $articles->caption) }}";
 
-                hiddenSpesialKategori.value = "";
-                hiddenStatusArticles.value = "";
+                // Hapus opsi "khusus" dari dropdown supaya tidak bisa dipilih lagi
+                removeKhususOption(spesialKategori);
+                removeKhususOption(statusArticles);
+
+                // Reset hidden values agar tetap dikirim ke backend
+                hiddenSpesialKategori.value = spesialKategori.value;
+                hiddenStatusArticles.value = statusArticles.value;
             }
+
+            document.querySelectorAll("select option[value='khusus']").forEach(option => {
+                if (kategori.value !== "khusus") {
+                    option.remove();
+                }
+            });
+            document.querySelectorAll("select option[value='spesial']").forEach(option => {
+                if (status_publish.value !== "spesial") {
+                    option.remove();
+                }
+            });
         }
 
-        document.getElementById("spesial_kategori").addEventListener("change", function() {
-            document.getElementById("spesial_kategori_hidden").value = this.value;
-        });
-
-        document.getElementById("status_publish").addEventListener("change", function() {
-            document.getElementById("status_publish_hidden").value = this.value;
-        });
-
-        window.onload = function() {
-            toggleReadonly();
-        };
+        function removeKhususOption(selectElement) {
+            let options = selectElement?.getElementsByTagName("option");
+            for (let i = options.length - 1; i >= 0; i--) {
+                if (options[i].value === "khusus") {
+                    options[i].remove();
+                }
+            }
+        }
     </script>
 </x-app-layout>

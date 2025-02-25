@@ -31,23 +31,46 @@
     <x-slot name="script">
         <script type="text/javascript">
             window.deleteAgenda = function(id) {
-                if (confirm("Are you sure you want to delete?")) {
-                    $.ajax({
-                        url: '{{ route('agenda.destroy') }}',
-                        type: 'DELETE',
-                        data: {
-                            id: id,
-                            _token: '{{ csrf_token() }}' // Tambahkan token CSRF di sini
-                        },
-                        dataType: "json",
-                        success: function(response) {
-                            window.location.reload();
-                        },
-                        error: function(xhr) {
-                            alert("Error: " + xhr.responseText);
-                        }
-                    });
-                }
+                Swal.fire({
+                    title: "Apakah Anda yakin?",
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Ya, hapus!",
+                    cancelButtonText: "Batal"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('agenda.destroy') }}',
+                            type: 'DELETE',
+                            data: {
+                                id: id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if (response.status) {
+                                    Swal.fire({
+                                        title: "Terhapus!",
+                                        text: "Agenda berhasil dihapus.",
+                                        icon: "success",
+                                        timer: 1000,
+                                        showConfirmButton: false
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus.", "error");
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire("Error!", "Terjadi kesalahan saat menghapus.", "error");
+                            }
+                        });
+                    }
+                });
             }
             $(document).ready(function() {
                 $('#sliderTable').DataTable({
